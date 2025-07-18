@@ -4,6 +4,23 @@
   themes: light --dim, dark;
 }
 
+/* globals.css */
+
+body {
+  background: radial-gradient(
+    circle at top left,
+    #011d3a,   /* very dark navy blue */
+    #021428,
+    #022b52,
+    #012344,
+    #03162d
+  );
+  background-attachment: fixed;
+  background-size: cover;
+}
+
+
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -44,6 +61,24 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+}
+.nav-link {
+  @apply text-white hover:text-white/80 transition-all duration-300 relative;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  width: 0%;
+  height: 2px;
+  bottom: -2px;
+  left: 0;
+  background: white;
+  transition: width 0.3s ease;
+}
+
+.nav-link:hover::after {
+  width: 100%;
 }
 
 :root {

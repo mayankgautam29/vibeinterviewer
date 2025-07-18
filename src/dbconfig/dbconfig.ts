@@ -1,4 +1,6 @@
 import mongoose from "mongoose"
+import { EventEmitter } from "events";
+EventEmitter.defaultMaxListeners = 20;
 export async function connect(){
     try {
         await mongoose.connect(process.env.MONGO_URI!)

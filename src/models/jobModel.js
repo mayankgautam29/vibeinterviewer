@@ -18,7 +18,7 @@ const jobSchema = new Schema({
         ref: "User"
     },
     applicants: [
-        {type: Schema.Types.ObjectId,ref: "User"}
+        {type: String}
     ]
 })
 const Job = mongoose.models.Job || mongoose.model("Job", jobSchema)

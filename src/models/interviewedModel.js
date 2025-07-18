@@ -1,21 +1,25 @@
-import mongoose,{Schema} from "mongoose";
+import mongoose, { Schema } from "mongoose";
 const interviewModel = new Schema({
-    userId: {
-        type: Schema.Types.ObjectId,
-        required: true,
-        ref: "User"
-    },
-    jobId: {
-        type: Schema.Types.ObjectId,
-        required: true,
-        ref: "Job"
-    },
-    interviewSummary: {
-        type: String
-    },
-    interviewScore: {
-        type: Number
-    }
-})
-const Interview = mongoose.models.Interview || mongoose.model("Job",interviewModel)
+  userId: {
+    type: String,
+    required: true,
+  },
+  jobId: {
+    type: String,
+    required: true,
+  },
+  interviewSummary: {
+    type: String,
+  },
+  interviewScore: {
+    type: Number,
+  },
+  status: {
+    type: String,
+    enum: ["pending", "accepted", "rejected"],
+    default: "pending",
+  }
+});
+const Interview =
+  mongoose.models.Interview || mongoose.model("Interview", interviewModel);
 export default Interview;

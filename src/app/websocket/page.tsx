@@ -1,5 +1,6 @@
 "use client";
 
+import { useParams } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 
 declare global {
@@ -10,6 +11,8 @@ declare global {
 }
 
 export default function WS() {
+  const params = useParams();
+  const jobId = params.id;
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<string[]>([]);
   const [interviewEnded, setInterviewEnded] = useState(false);

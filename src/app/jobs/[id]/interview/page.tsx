@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
+import { useParams } from "next/navigation";
+import { useAuth } from "@clerk/nextjs";
 
 declare global {
   interface Window {
@@ -11,6 +13,9 @@ declare global {
 }
 
 export default function WS() {
+  const params = useParams();
+  const jobId = params.id;
+  const {userId} = useAuth();
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<string[]>([]);
   const [interviewEnded, setInterviewEnded] = useState(false);
@@ -35,7 +40,9 @@ export default function WS() {
           setMessages((prev) => [...prev, `🧠 Server: ${data.question}`]);
 
           if (data.audio_base64) {
-            const audio = new Audio(`data:audio/wav;base64,${data.audio_base64}`);
+            const audio = new Audio(
+              `data:audio/wav;base64,${data.audio_base64}`
+            );
             audioRef.current = audio;
 
             audio.onended = () => {
@@ -52,6 +59,10 @@ export default function WS() {
         setMessages((prev) => [...prev, `📩 Server: ${event.data}`]);
 
         if (event.data.includes("Interview complete")) {
+          const saving = async() => {
+            const res = await axios.post("/api/saveinterview",{jobId,userId})
+          }
+          saving();
           setInterviewEnded(true);
           setStarted(false);
         }
@@ -77,22 +88,31 @@ export default function WS() {
       ]);
 
       const userResume = resumeRes.data?.summary || "No resume summary found";
-      const jobDescObj = jobRes.data?.desc || { message: "No job description found" };
-      const jobDescStr = typeof jobDescObj === "string" ? jobDescObj : JSON.stringify(jobDescObj, null, 2);
+      const jobDescObj = jobRes.data?.desc || {
+        message: "No job description found",
+      };
+      const jobDescStr =
+        typeof jobDescObj === "string"
+          ? jobDescObj
+          : JSON.stringify(jobDescObj, null, 2);
 
-      const combinedMessage = `✅ Resume summary: ${userResume}\n📄 Job description: ${jobDescStr}`;
+      const combinedMessage = `Resume summary: ${userResume}\n Job description: ${jobDescStr}\n jobId: ${jobId}\n userId: ${userId}`;
 
       setMessages((prev) => [...prev, `📝 Sent: Resume + Job description`]);
       socket.current?.send(combinedMessage);
     } catch (err) {
       console.error("❌ Failed to fetch resume or job description:", err);
-      setMessages((prev) => [...prev, "❌ Failed to fetch resume or job description."]);
+      setMessages((prev) => [
+        ...prev,
+        "❌ Failed to fetch resume or job description.",
+      ]);
     }
   };
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      const SpeechRecognition =
+        window.SpeechRecognition || window.webkitSpeechRecognition;
       if (!SpeechRecognition) return;
 
       recognition.current = new SpeechRecognition();
