@@ -5,6 +5,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
   try {
+    await connect();
     const { userId } = await auth();
     if (!userId) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });

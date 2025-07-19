@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 
 const isPublicRoute = createRouteMatcher([
   "/",
-  "//jobs",
+  "/jobs",
   "/sign-in",
   "/sign-up",
   "/verify-email",
@@ -12,7 +12,8 @@ const isPublicRoute = createRouteMatcher([
 
 const isPublicApiRoute = createRouteMatcher([
   "/home",
-  "/api/main"
+  "/api/main",
+  "/api/alljobs"
 ]);
 
 export default clerkMiddleware(async (auth, req) => {

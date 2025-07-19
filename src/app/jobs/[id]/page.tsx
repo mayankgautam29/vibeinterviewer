@@ -5,6 +5,7 @@ import axios from "axios";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { cn } from "@/lib/utils";
 
 type JobType = {
   _id: string;
@@ -83,13 +84,11 @@ export default function JobPage() {
 
   const handleStatusChange = async (status: "accepted" | "rejected") => {
     if (!interviewModel?._id) return;
-
     try {
       const res = await axios.post("/api/interviewstatus", {
         interviewId: interviewModel._id,
         status,
       });
-
       if (res.data.success) {
         setInterviewModel((prev) => prev ? { ...prev, status } : prev);
       }
@@ -107,64 +106,75 @@ export default function JobPage() {
   };
 
   return (
-    <div className="p-4 mt-10">
-      <h1 className="text-2xl font-bold">{job?.jobtitle}</h1>
-      <p className="text-gray-600">{job?.company}</p>
-      <p className="mt-2">{job?.jobdescription}</p>
+    <div className="min-h-screen flex justify-center items-center px-4 py-2">
+      <div className="max-w-2xl w-full p-6 rounded-2xl bg-white/5 backdrop-blur-md shadow-[0_0_20px_rgba(0,255,255,0.2)] border border-cyan-400 animate-fade-in transition-all duration-700 ease-out">
+        <h1 className="text-3xl font-extrabold text-cyan-400 mb-2">{job?.jobtitle}</h1>
+        <p className="text-gray-300 mb-2">{job?.company}</p>
+        <p className="text-gray-400 mb-6">{job?.jobdescription}</p>
 
-      <div className="mt-4">
-        Posted by: {job?.jobByUser?.username}
-        <img
-          src={job?.jobByUser?.profileImg}
-          className="w-6 h-6 rounded-full inline-block ml-2"
-        />
+        <div className="flex items-center gap-2 mb-6">
+          <span className="text-gray-300">Posted by:</span>
+          <img
+            src={job?.jobByUser?.profileImg}
+            alt="user"
+            className="w-8 h-8 rounded-full border border-cyan-500 shadow"
+          />
+          <span className="text-white">{job?.jobByUser?.username}</span>
+        </div>
 
-        {owner && (
+        {owner && interviewModel && (
           <>
-            <div className="mt-2">User: {usr?.username}</div>
-            <div>Score: {interviewModel?.interviewScore}</div>
-            <div>Status: {interviewModel?.status}</div>
+            <h2 className="text-xl font-semibold text-cyan-300 mb-2">📄 Candidate Review</h2>
+            <div className="bg-[#111827] p-4 rounded-xl border border-cyan-600 shadow-md space-y-3">
+              <div className="text-white">User: <span className="font-semibold">{usr?.username}</span></div>
+              <div className="text-white">Score: {interviewModel?.interviewScore}</div>
+              <div className="text-white">Status: {interviewModel?.status}</div>
+              <div className="text-white whitespace-pre-wrap">
+                <span className="font-medium">Interview Summary:</span><br />
+                {interviewModel?.interviewSummary || "No summary available."}
+              </div>
 
-            <div className="flex gap-2 mt-2">
-              <button
-                className="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700"
-                onClick={() => handleStatusChange("accepted")}
-              >
-                Accept
-              </button>
-              <button
-                className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700"
-                onClick={() => handleStatusChange("rejected")}
-              >
-                Reject
-              </button>
+              <div className="flex gap-3 mt-3">
+                <button
+                  onClick={() => handleStatusChange("accepted")}
+                  className="px-4 py-2 rounded-lg bg-green-600 hover:bg-green-700 text-white transition"
+                >
+                  ✅ Accept
+                </button>
+                <button
+                  onClick={() => handleStatusChange("rejected")}
+                  className="px-4 py-2 rounded-lg bg-red-600 hover:bg-red-700 text-white transition"
+                >
+                  ❌ Reject
+                </button>
+              </div>
             </div>
           </>
         )}
 
         {!owner && interviewed && (
-          <div>Status: {userInterview?.status}</div>
+          <div className="text-yellow-400 font-medium mt-4">Status: {userInterview?.status}</div>
         )}
+
+        {!owner && (
+          interviewed ? (
+            <div className="text-green-500 mt-4 font-semibold">✅ You have already applied</div>
+          ) : (
+            <button
+              onClick={handleApplyClick}
+              className="mt-4 px-5 py-2 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 text-white hover:scale-105 transition-transform duration-300 shadow-md"
+            >
+              🚀 Apply Now
+            </button>
+          )
+        )}
+
+        {/* {job?.applicants && (
+          <div className="mt-6 text-cyan-400 text-sm font-medium tracking-wide border-t border-cyan-700 pt-3">
+            Applicants Count: {job.applicants.length}
+          </div>
+        )} */}
       </div>
-
-      {!owner && (
-        interviewed ? (
-          <div className="mt-2 text-green-600">You have already applied</div>
-        ) : (
-          <button
-            onClick={handleApplyClick}
-            className="text-blue-600 underline mt-2 block"
-          >
-            Apply Here
-          </button>
-        )
-      )}
-
-      {job?.applicants && (
-        <div className="mt-2 text-sm text-blue-500">
-          Applicants: {job.applicants.length}
-        </div>
-      )}
     </div>
   );
 }
