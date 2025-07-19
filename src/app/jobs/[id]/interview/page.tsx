@@ -31,7 +31,6 @@ export default function WS() {
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
-    // Access camera
     if (navigator.mediaDevices?.getUserMedia) {
       navigator.mediaDevices
         .getUserMedia({ video: true, audio: false })
@@ -43,8 +42,7 @@ export default function WS() {
         .catch((err) => console.error("Camera access error:", err));
     }
 
-    // WebSocket setup
-    socket.current = new WebSocket("ws://localhost:8000/ws");
+    socket.current = new WebSocket("wss://vibeinterviewer-backend1.onrender.com/ws");
 
     socket.current.onopen = () => {
       console.log("✅ WebSocket connected");

@@ -18,7 +18,7 @@ export default function Resume() {
     setLoading(true);
 
     try {
-      const res = await axios.post("http://localhost:8000/indexing", formData);
+      const res = await axios.post("https://vibeinterviewer-backend1-1.onrender.com/indexing", formData);
       const msg = JSON.stringify(res.data.message, null, 2);
       await axios.post("/api/resumeupload", { message: msg });
 
