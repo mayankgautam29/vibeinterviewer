@@ -51,7 +51,7 @@ export default function WS() {
       setSocketReady(true);
     };
 
-    socket.current.onmessage = (event) => {
+    socket.current.onmessage = async (event) => {
       try {
         const data = JSON.parse(event.data);
         if (data.question) {
@@ -77,6 +77,12 @@ export default function WS() {
         if (event.data.includes("Interview complete")) {
           setInterviewEnded(true);
           setStarted(false);
+          try {
+            await axios.post("/api/addApplicant", { jobId, userId });
+            console.log("✅ User added to applicants");
+          } catch (err) {
+            console.error("❌ Failed to add applicant:", err);
+          }
         }
       }
     };

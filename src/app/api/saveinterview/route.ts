@@ -1,5 +1,5 @@
 import { connect } from "@/dbconfig/dbconfig";
-import Interview from "@/models/interviewedModel";
+import Job from "@/models/jobModel";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
@@ -10,13 +10,17 @@ export async function POST(request: NextRequest) {
     if (!jobId || !userId) {
       return NextResponse.json({ error: "Missing jobId or userId" }, { status: 400 });
     }
-    const newInterview = await Interview.create({
+    const updatedJob = await Job.findByIdAndUpdate(
       jobId,
-      userId,
-      status: "pending",
-    });
+      { $addToSet: { applicants: userId } },
+      { new: true }
+    );
 
-    return NextResponse.json({ message: "Interview saved", interview: newInterview });
+    if (!updatedJob) {
+      return NextResponse.json({ error: "Job not found" }, { status: 404 });
+    }
+
+    return NextResponse.json({ message: "User added to applicants array" });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
