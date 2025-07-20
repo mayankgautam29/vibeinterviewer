@@ -98,12 +98,13 @@ export default function JobPage() {
   };
 
   const handleApplyClick = () => {
-    if (!usr?.resume) {
+    if (usr?.resume === "") {
       router.push("/resume");
     } else {
       router.push(`/jobs/${job?._id}/interview`);
     }
   };
+  console.log(usr?.resume);
 
   return (
     <div className="min-h-screen flex justify-center items-center px-4 py-2">
