@@ -63,7 +63,7 @@ export default function Home() {
             <h1 className="text-5xl sm:text-6xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-fuchsia-500">
               Ace Your Next Interview with AI
             </h1>
-            <p className="text-3xl font-medium text-slate-300 mb-7 h-6">
+            <p className="text-3xl font-medium text-slate-300 mb-15 mt-10 h-6">
               {rotatingTexts[rotatingIndex]}
             </p>
 
