@@ -42,7 +42,7 @@ export default function WS() {
         .catch((err) => console.error("Camera access error:", err));
     }
 
-    socket.current = new WebSocket("wss://vibeinterviewer-backend1.onrender.com/ws");
+    socket.current = new WebSocket("ws://localhost:8000/ws");
 
     socket.current.onopen = () => {
       console.log("✅ WebSocket connected");
@@ -75,12 +75,12 @@ export default function WS() {
         if (event.data.includes("Interview complete")) {
           setInterviewEnded(true);
           setStarted(false);
-          try {
-            await axios.post("/api/addApplicant", { jobId, userId });
-            console.log("✅ User added to applicants");
-          } catch (err) {
-            console.error("❌ Failed to add applicant:", err);
-          }
+          // try {
+          //   await axios.post("/api/addApplicant", { jobId, userId });
+          //   console.log("✅ User added to applicants");
+          // } catch (err) {
+          //   console.error("❌ Failed to add applicant:", err);
+          // }
         }
       }
     };
@@ -110,7 +110,7 @@ export default function WS() {
         typeof jobDesc === "string" ? jobDesc : JSON.stringify(jobDesc);
 
       const combined = `Resume summary: ${userResume}\nJob description: ${jobDescStr}\njobId: ${jobId}\nuserId: ${userId}`;
-      setMessages((prev) => [...prev, "📝 Sent: Resume + Job description"]);
+      setMessages((prev) => [...prev, "📝 Waiting for the server..."]);
       socket.current?.send(combined);
     } catch (err) {
       console.error("❌ Failed to fetch resume or job description:", err);
@@ -174,6 +174,8 @@ export default function WS() {
         {!socketReady && (
           <div className="text-yellow-300 font-semibold mb-2 animate-pulse">
             🔄 Connecting to server...
+
+            Reload if not connected for more than 10 seconds.
           </div>
         )}
 
@@ -193,7 +195,7 @@ export default function WS() {
 
         {interviewEnded && (
           <div className="text-green-400 font-semibold mt-2">
-            ✅ Interview Completed. Thank you!
+            ✅ Interview Completed. Thank you! You can now leave the page.
           </div>
         )}
 
