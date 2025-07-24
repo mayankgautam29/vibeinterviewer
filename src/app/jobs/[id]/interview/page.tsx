@@ -42,7 +42,7 @@ export default function WS() {
         .catch((err) => console.error("Camera access error:", err));
     }
 
-    socket.current = new WebSocket("ws://localhost:8000/ws");
+    socket.current = new WebSocket("wss://vibeinterviewer-backend1.onrender.com/ws");
 
     socket.current.onopen = () => {
       console.log("✅ WebSocket connected");
