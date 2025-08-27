@@ -1,5 +1,5 @@
 import { connect } from "@/dbconfig/dbconfig";
-import User from "@/models/userModel"; // ✅ must be imported before Job
+import User from "@/models/userModel";
 import Job from "@/models/jobModel";
 import { NextRequest, NextResponse } from "next/server";
 
