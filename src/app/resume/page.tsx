@@ -22,7 +22,6 @@ export default function Resume() {
       const msg = JSON.stringify(res.data.message, null, 2);
       await axios.post("/api/resumeupload", { message: msg });
 
-      // Redirect after upload
       router.push("/jobs");
     } catch (err) {
       console.error("Upload failed:", err);
