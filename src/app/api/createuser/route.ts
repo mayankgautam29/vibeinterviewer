@@ -27,7 +27,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ data: newUser }, { status: 201 });
 
   } catch (error: any) {
-    console.error("❌ Error in /api/createuser:", error);
+    console.error("Error in /api/createuser:", error);
     return NextResponse.json({ error: error.message || "Something went wrong" }, { status: 500 });
   }
 }
