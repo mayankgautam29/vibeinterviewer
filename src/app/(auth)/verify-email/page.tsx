@@ -3,8 +3,8 @@
 import { useSignUp } from "@clerk/nextjs";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { AuthLayout } from "@/components/ui/auth-layout";
+import { GradientButton } from "@/components/ui/gradient-button";
 
 export default function VerifyEmailPage() {
   const { signUp, setActive, isLoaded } = useSignUp();
@@ -19,10 +19,7 @@ export default function VerifyEmailPage() {
     setLoading(true);
     setError(null);
     try {
-      const result = await signUp.attemptEmailAddressVerification({
-        code: otpCode,
-      });
-
+      const result = await signUp.attemptEmailAddressVerification({ code: otpCode });
       if (result.status === "complete") {
         await setActive({ session: result.createdSessionId });
         await fetch("/api/createuser");
@@ -34,41 +31,29 @@ export default function VerifyEmailPage() {
       setLoading(false);
     }
   };
-  return (
-    <div className="flex items-center justify-center min-h-screen">
-      <form
-        onSubmit={handleVerify}
-        className="w-full max-w-sm p-8 space-y-6 rounded-xl bg-white/5 border border-white/10 backdrop-blur-md shadow-2xl"
-      >
-        <h2 className="text-2xl font-bold text-center text-white">
-          Verify Your Email
-        </h2>
 
+  return (
+    <AuthLayout title="Verify your email" subtitle="Enter the 6-digit code we sent to your inbox">
+      <form onSubmit={handleVerify} className="space-y-4">
         <div>
-          <label className="block text-sm text-gray-300 mb-2">
-            Enter OTP sent to your email
-          </label>
-          <Input
+          <label className="label-field">Verification code</label>
+          <input
             type="text"
             value={otpCode}
             onChange={(e) => setOtpCode(e.target.value)}
             placeholder="123456"
+            className="input-field text-center text-2xl tracking-[0.5em] font-mono"
             required
-            className="text-white placeholder:text-gray-400"
           />
         </div>
-
-        {error && <p className="text-sm text-red-400">{error}</p>}
-
-        <Button type="submit" className="w-full" disabled={loading}>
-          {loading ? "Verifying..." : "Verify Email"}
-        </Button>
-
-        <p className="text-sm text-center text-gray-400">
-          Didn’t receive the code?{" "}
-          <span className="text-cyan-400">Check your spam folder</span>
+        {error && <p className="rounded-lg bg-rose-500/10 border border-rose-500/20 px-3 py-2 text-sm text-rose-300">{error}</p>}
+        <GradientButton type="submit" loading={loading} fullWidth>
+          Verify Email
+        </GradientButton>
+        <p className="text-center text-xs text-slate-500">
+          Didn&apos;t receive it? Check your spam folder.
         </p>
       </form>
-    </div>
+    </AuthLayout>
   );
 }

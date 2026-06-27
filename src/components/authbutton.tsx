@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useAuth, useClerk } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
+import { LogIn, LogOut } from "lucide-react";
 
 export default function AuthButton() {
   const { isSignedIn } = useAuth();
@@ -15,12 +16,7 @@ export default function AuthButton() {
 
   if (!mounted) {
     return (
-      <button
-        className="px-4 py-2 bg-white/10 text-white rounded-full opacity-50"
-        disabled
-      >
-        Loading...
-      </button>
+      <div className="h-9 w-24 animate-pulse rounded-full bg-white/10" />
     );
   }
 
@@ -28,8 +24,9 @@ export default function AuthButton() {
     return (
       <button
         onClick={() => signOut()}
-        className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-full transition duration-300 backdrop-blur-sm border border-white/20"
+        className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm font-medium text-white transition hover:border-rose-500/40 hover:bg-rose-500/10 hover:text-rose-200"
       >
+        <LogOut className="h-4 w-4" />
         Logout
       </button>
     );
@@ -38,9 +35,10 @@ export default function AuthButton() {
   return (
     <Link
       href="/sign-in"
-      className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-full transition duration-300 backdrop-blur-sm border border-white/20"
+      className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-cyan-500 to-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-cyan-500/20 transition hover:brightness-110"
     >
-      Login
+      <LogIn className="h-4 w-4" />
+      Sign In
     </Link>
   );
 }

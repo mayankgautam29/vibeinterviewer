@@ -383,18 +383,15 @@ export default function InterviewPage() {
       : 0;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900 text-white">
-      <div className="max-w-7xl mx-auto px-4 py-6 space-y-6">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <div>
-            <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-cyan-300 to-indigo-300 bg-clip-text text-transparent">
-              AI Interview Session
-            </h1>
-            <p className="text-slate-400 text-sm mt-1">
-              Adaptive interview — questions follow your answers until the AI has enough signal.
-            </p>
-          </div>
-          <div className="flex items-center gap-3">
+    <div className="mx-auto max-w-7xl space-y-6 px-4 py-6">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h1 className="gradient-text text-2xl font-bold md:text-3xl">AI Interview Session</h1>
+          <p className="mt-1 text-sm text-slate-400">
+            Adaptive interview — questions follow your answers until the AI has enough signal.
+          </p>
+        </div>
+        <div className="flex flex-wrap items-center gap-2">
             <span
               className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium ${
                 socketReady
@@ -416,10 +413,10 @@ export default function InterviewPage() {
                 {snapshotCount} snapshots
               </span>
             )}
-          </div>
         </div>
+      </div>
 
-        {started && !interviewEnded && (
+      {started && !interviewEnded && (
           <div className="bg-slate-900/60 border border-slate-700 rounded-xl p-4">
             <div className="flex justify-between text-sm mb-2">
               <span className="text-slate-300">
@@ -553,7 +550,7 @@ export default function InterviewPage() {
                     onChange={(e) => setInput(e.target.value)}
                     onKeyDown={(e) => e.key === "Enter" && submitAnswer(input)}
                     placeholder="Type your answer or use voice..."
-                    className="flex-1 px-4 py-3 rounded-xl bg-slate-800 border border-slate-600 focus:border-cyan-500 focus:outline-none text-sm"
+                    className="input-field flex-1 text-sm"
                   />
                   <button
                     onClick={() => submitAnswer(input)}
@@ -567,7 +564,6 @@ export default function InterviewPage() {
             </div>
           </div>
         </div>
-      </div>
       <audio ref={audioRef} hidden />
     </div>
   );

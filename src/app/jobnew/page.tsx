@@ -1,7 +1,13 @@
 "use client";
+
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { Briefcase, Building2, FileText } from "lucide-react";
+import { PageShell } from "@/components/ui/page-shell";
+import { PageHeader } from "@/components/ui/page-header";
+import { GlassCard } from "@/components/ui/glass-card";
+import { GradientButton } from "@/components/ui/gradient-button";
 
 export default function Jobnew() {
   const router = useRouter();
@@ -12,7 +18,6 @@ export default function Jobnew() {
 
   const onSubmit = async () => {
     if (!company || !jobtitle || !jobDesc) return;
-
     try {
       setLoading(true);
       await axios.post("/api/createjob", {
@@ -29,14 +34,17 @@ export default function Jobnew() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-12 space-y-6">
-      <span className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-slate-300 via-slate-100 to-slate-400 animate-shimmer-dark mb-5">
-        Post a New Job
-      </span>
+    <PageShell narrow>
+      <PageHeader
+        badge="Recruiters"
+        title="Post a New Job"
+        subtitle="Create a listing and let candidates complete AI-powered adaptive interviews."
+      />
 
-      <div className="space-y-4 mt-5">
-        <div className="flex flex-col">
-          <label htmlFor="company" className="mb-1 text-sm font-medium text-slate-300">
+      <GlassCard className="space-y-5">
+        <div>
+          <label htmlFor="company" className="label-field">
+            <Building2 className="mr-1.5 inline h-4 w-4 text-slate-500" />
             Company Name
           </label>
           <input
@@ -44,13 +52,14 @@ export default function Jobnew() {
             type="text"
             value={company}
             onChange={(e) => setCompany(e.target.value)}
-            className="bg-zinc-800 text-white p-3 rounded-md border border-zinc-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="e.g., OpenAI"
+            className="input-field"
+            placeholder="e.g., Acme Corp"
           />
         </div>
 
-        <div className="flex flex-col">
-          <label htmlFor="jobtitle" className="mb-1 text-sm font-medium text-slate-300">
+        <div>
+          <label htmlFor="jobtitle" className="label-field">
+            <Briefcase className="mr-1.5 inline h-4 w-4 text-slate-500" />
             Job Title
           </label>
           <input
@@ -58,33 +67,35 @@ export default function Jobnew() {
             type="text"
             value={jobtitle}
             onChange={(e) => setJobtitle(e.target.value)}
-            className="bg-zinc-800 text-white p-3 rounded-md border border-zinc-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="e.g., Frontend Engineer"
+            className="input-field"
+            placeholder="e.g., Senior Frontend Engineer"
           />
         </div>
 
-        <div className="flex flex-col">
-          <label htmlFor="jobDesc" className="mb-1 text-sm font-medium text-slate-300">
+        <div>
+          <label htmlFor="jobDesc" className="label-field">
+            <FileText className="mr-1.5 inline h-4 w-4 text-slate-500" />
             Job Description
           </label>
           <textarea
             id="jobDesc"
             value={jobDesc}
             onChange={(e) => setJobDesc(e.target.value)}
-            rows={5}
-            className="bg-zinc-800 text-white p-3 rounded-md border border-zinc-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="e.g., We are hiring a talented..."
-          ></textarea>
+            rows={6}
+            className="input-field resize-none"
+            placeholder="Describe the role, requirements, and what you're looking for..."
+          />
         </div>
 
-        <button
+        <GradientButton
           onClick={onSubmit}
-          disabled={loading}
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md transition disabled:opacity-50"
+          disabled={!company || !jobtitle || !jobDesc}
+          loading={loading}
+          fullWidth
         >
-          {loading ? "Submitting..." : "Submit"}
-        </button>
-      </div>
-    </div>
+          Publish Job Listing
+        </GradientButton>
+      </GlassCard>
+    </PageShell>
   );
 }

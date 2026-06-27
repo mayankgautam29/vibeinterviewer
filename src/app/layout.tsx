@@ -33,7 +33,7 @@ export default function RootLayout({
         >
           <ParallaxClient />
           <Navbar />
-          <main className="pt-16 px-4 mt-5 sm:px-6 lg:px-8">
+          <main className="relative min-h-[calc(100vh-4rem)] pt-20 pb-12">
             {children}
           </main>
         </body>

@@ -2,6 +2,9 @@
 
 import { useSignIn } from "@clerk/nextjs";
 import { useState } from "react";
+import Link from "next/link";
+import { AuthLayout } from "@/components/ui/auth-layout";
+import { GradientButton } from "@/components/ui/gradient-button";
 
 export default function CustomSignInPage() {
   const { signIn, setActive, isLoaded } = useSignIn();
@@ -13,18 +16,13 @@ export default function CustomSignInPage() {
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!isLoaded) return;
-
     setLoading(true);
     setError(null);
-
     try {
       const result = await signIn.create({ identifier: email, password });
-
       if (result.status === "complete") {
         await setActive({ session: result.createdSessionId });
         window.location.href = "/";
-      } else {
-        console.log("Incomplete sign-in:", result);
       }
     } catch (err: any) {
       setError(err.errors?.[0]?.longMessage || "Invalid credentials.");
@@ -34,54 +32,32 @@ export default function CustomSignInPage() {
   };
 
   return (
-    <div className="flex items-center justify-center h-screen">
-      <div className="w-full max-w-md p-8 space-y-6 rounded-xl bg-white/5 border border-white/10 backdrop-blur-lg shadow-xl">
-        <h2 className="text-3xl font-bold text-white text-center">Sign In</h2>
-
-        <form onSubmit={handleSignIn} className="space-y-4">
-          <div>
-            <label className="block text-sm text-gray-300">Email</label>
-            <input
-              type="email"
-              className="w-full px-4 py-2 rounded-lg bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm text-gray-300">Password</label>
-            <input
-              type="password"
-              className="w-full px-4 py-2 rounded-lg bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
-
-          {error && <p className="text-red-400 text-sm">{error}</p>}
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition duration-200"
-          >
-            {loading ? "Signing in..." : "Sign In"}
-          </button>
-        </form>
-
-        <div className="text-center text-sm text-gray-400">
-          Don’t have an account?{" "}
-          <a
-            href="/sign-up"
-            className="text-blue-500 hover:underline hover:text-blue-400"
-          >
-            Sign Up
-          </a>
+    <AuthLayout
+      title="Welcome back"
+      subtitle="Sign in to continue your interview journey"
+      footer={
+        <>
+          Don&apos;t have an account?{" "}
+          <Link href="/sign-up" className="text-cyan-400 hover:underline">
+            Sign up
+          </Link>
+        </>
+      }
+    >
+      <form onSubmit={handleSignIn} className="space-y-4">
+        <div>
+          <label className="label-field">Email</label>
+          <input type="email" className="input-field" value={email} onChange={(e) => setEmail(e.target.value)} required />
         </div>
-      </div>
-    </div>
+        <div>
+          <label className="label-field">Password</label>
+          <input type="password" className="input-field" value={password} onChange={(e) => setPassword(e.target.value)} required />
+        </div>
+        {error && <p className="rounded-lg bg-rose-500/10 border border-rose-500/20 px-3 py-2 text-sm text-rose-300">{error}</p>}
+        <GradientButton type="submit" loading={loading} fullWidth>
+          Sign In
+        </GradientButton>
+      </form>
+    </AuthLayout>
   );
 }
