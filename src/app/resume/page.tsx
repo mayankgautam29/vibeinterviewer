@@ -10,6 +10,7 @@ import { PageShell } from "@/components/ui/page-shell";
 import { PageHeader } from "@/components/ui/page-header";
 import { GlassCard } from "@/components/ui/glass-card";
 import { GradientButton } from "@/components/ui/gradient-button";
+import { BackLink } from "@/components/ui/back-link";
 
 export default function Resume() {
   const [pdf, setPdf] = useState<File | null>(null);
@@ -40,29 +41,34 @@ export default function Resume() {
 
   return (
     <PageShell narrow>
+      <BackLink href="/profile">Profile</BackLink>
+
       <PageHeader
-        badge="Profile setup"
+        badge="Setup"
         title="Upload resume"
         subtitle="PDF or DOCX. We extract and index your experience for interview questions."
         centered={false}
+        className="mt-6"
       />
 
       <GlassCard className="space-y-5">
         <label
-          className={`flex cursor-pointer flex-col items-center rounded-md border border-dashed px-6 py-12 text-center transition-colors ${
-            pdf ? "border-zinc-600 bg-zinc-900/50" : "border-zinc-700 hover:border-zinc-600 hover:bg-zinc-900/30"
+          className={`flex cursor-pointer flex-col items-center rounded-lg border border-dashed px-6 py-12 text-center transition-colors ${
+            pdf
+              ? "border-teal-500/30 bg-teal-500/5"
+              : "border-slate-700/80 hover:border-sky-500/30 hover:bg-sky-500/[0.03]"
           }`}
         >
-          <FileUp className="mb-3 h-8 w-8 text-zinc-500" strokeWidth={1.25} />
+          <FileUp className="mb-3 h-8 w-8 text-slate-500" strokeWidth={1.25} />
           {pdf ? (
             <>
-              <p className="text-sm font-medium text-zinc-200">{pdf.name}</p>
-              <p className="mt-1 text-xs text-zinc-500">{(pdf.size / 1024).toFixed(0)} KB</p>
+              <p className="text-sm font-medium text-slate-200">{pdf.name}</p>
+              <p className="mt-1 text-xs text-slate-500">{(pdf.size / 1024).toFixed(0)} KB</p>
             </>
           ) : (
             <>
-              <p className="text-sm text-zinc-300">Choose a file or drag it here</p>
-              <p className="mt-1 text-xs text-zinc-600">PDF, DOCX</p>
+              <p className="text-sm text-slate-300">Choose a file or drag it here</p>
+              <p className="mt-1 text-xs text-slate-600">PDF, DOCX</p>
             </>
           )}
           <input
@@ -78,7 +84,11 @@ export default function Resume() {
         </GradientButton>
 
         {status && (
-          <p className={`text-center text-sm ${status.includes("failed") ? "text-red-400" : "text-zinc-400"}`}>
+          <p
+            className={`text-center text-sm ${
+              status.includes("failed") ? "text-red-400" : "text-teal-400/90"
+            }`}
+          >
             {status}
           </p>
         )}

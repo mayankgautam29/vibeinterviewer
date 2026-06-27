@@ -27,43 +27,49 @@ export default function ProfilePage() {
   const hasResume = Boolean(user.resume);
 
   return (
-    <div className="mx-auto max-w-md">
+    <div className="mx-auto max-w-lg">
       <PageHeader badge="Account" title="Profile" centered={false} />
 
-      <GlassCard className="text-center">
+      <div className="flex items-start gap-5 border-b border-slate-800/80 pb-8">
         {user.profileImg ? (
           <img
             src={user.profileImg}
             alt=""
-            className="mx-auto h-20 w-20 rounded-full border border-zinc-800 object-cover"
+            className="h-16 w-16 shrink-0 rounded-full border border-slate-700/60 object-cover ring-2 ring-sky-500/10"
           />
         ) : (
-          <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-zinc-800 text-xl font-medium text-zinc-400">
+          <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-slate-800 text-xl font-medium text-slate-400">
             {user.username?.[0]?.toUpperCase() ?? "?"}
           </div>
         )}
-
-        <h2 className="mt-4 text-lg font-medium text-zinc-100">{user.username}</h2>
-        <p className="mt-1 text-sm text-zinc-500">{user.email}</p>
-
-        <div className="mt-6 border-t border-zinc-800 pt-6">
-          <dl className="grid grid-cols-2 gap-4 text-left text-sm">
-            <div>
-              <dt className="text-zinc-600">Resume</dt>
-              <dd className="mt-0.5 font-medium text-zinc-300">
-                {hasResume ? "Uploaded" : "Missing"}
-              </dd>
-            </div>
-            <div>
-              <dt className="text-zinc-600">Can apply</dt>
-              <dd className="mt-0.5 font-medium text-zinc-300">
-                {hasResume ? "Yes" : "Upload resume first"}
-              </dd>
-            </div>
-          </dl>
+        <div>
+          <h2 className="text-lg font-semibold text-slate-100">{user.username}</h2>
+          <p className="mt-0.5 text-sm text-slate-500">{user.email}</p>
         </div>
+      </div>
 
-        <div className="mt-6">
+      <div className="grid grid-cols-2 gap-3 py-8">
+        <div className="surface rounded-lg px-4 py-4">
+          <p className="text-xs text-slate-600">Resume</p>
+          <p className="mt-1 text-sm font-medium text-slate-200">
+            {hasResume ? "Uploaded" : "Not uploaded"}
+          </p>
+        </div>
+        <div className="surface rounded-lg px-4 py-4">
+          <p className="text-xs text-slate-600">Interview ready</p>
+          <p className="mt-1 text-sm font-medium text-slate-200">
+            {hasResume ? "Yes" : "Upload resume first"}
+          </p>
+        </div>
+      </div>
+
+      <GlassCard>
+        <p className="text-sm text-slate-500">
+          {hasResume
+            ? "Your resume is indexed. Browse open roles and start an interview when you apply."
+            : "Upload a resume before applying to any role. We use it to tailor interview questions."}
+        </p>
+        <div className="mt-5">
           {!hasResume ? (
             <GradientButton onClick={() => router.push("/resume")} fullWidth>
               Upload resume

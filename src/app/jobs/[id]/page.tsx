@@ -2,13 +2,12 @@
 
 import { useAuth } from "@clerk/nextjs";
 import axios from "axios";
-import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { ArrowLeft } from "lucide-react";
 import { GlassCard } from "@/components/ui/glass-card";
 import { GradientButton } from "@/components/ui/gradient-button";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
+import { BackLink } from "@/components/ui/back-link";
 
 type JobType = {
   _id: string;
@@ -121,20 +120,21 @@ export default function JobPage() {
 
   return (
     <div className="mx-auto max-w-2xl space-y-6">
-      <Link href="/jobs" className="inline-flex items-center gap-1.5 text-sm text-zinc-500 hover:text-zinc-300">
-        <ArrowLeft className="h-4 w-4" />
-        All jobs
-      </Link>
+      <BackLink href="/jobs">All jobs</BackLink>
 
-      <header className="space-y-3">
-        <p className="text-sm text-zinc-500">{job?.company}</p>
-        <h1 className="text-2xl font-semibold tracking-tight text-zinc-50 sm:text-3xl">
+      <header className="space-y-2 border-b border-slate-800/80 pb-8">
+        <p className="text-sm font-medium text-teal-500/90">{job?.company}</p>
+        <h1 className="text-2xl font-semibold tracking-tight text-slate-50 sm:text-3xl">
           {job?.jobtitle}
         </h1>
         {job?.jobByUser && (
-          <div className="flex items-center gap-2 text-sm text-zinc-500">
+          <div className="flex items-center gap-2 pt-1 text-sm text-slate-500">
             {job.jobByUser.profileImg && (
-              <img src={job.jobByUser.profileImg} alt="" className="h-6 w-6 rounded-full" />
+              <img
+                src={job.jobByUser.profileImg}
+                alt=""
+                className="h-6 w-6 rounded-full ring-1 ring-slate-700/60"
+              />
             )}
             Posted by {job.jobByUser.username}
           </div>
@@ -142,11 +142,11 @@ export default function JobPage() {
       </header>
 
       <GlassCard>
-        <p className="text-sm leading-relaxed text-zinc-400 whitespace-pre-wrap">
+        <p className="whitespace-pre-wrap text-sm leading-relaxed text-slate-400">
           {job?.jobdescription}
         </p>
         {!owner && !interviewed && (
-          <div className="mt-6 border-t border-zinc-800 pt-6">
+          <div className="mt-6 border-t border-slate-800/80 pt-6">
             <GradientButton onClick={handleApplyClick}>Apply and start interview</GradientButton>
           </div>
         )}
@@ -154,7 +154,7 @@ export default function JobPage() {
 
       {!owner && interviewed && (
         <GlassCard>
-          <p className="text-sm text-zinc-400">
+          <p className="text-sm text-slate-400">
             Application submitted ·{" "}
             <span className={statusStyle[userInterview?.status || "pending"]}>
               {userInterview?.status}
@@ -167,7 +167,7 @@ export default function JobPage() {
         <div className="space-y-6">
           <div>
             <p className="section-label mb-2">Candidate review</p>
-            <h2 className="text-lg font-medium text-zinc-100">{usr?.username}</h2>
+            <h2 className="text-lg font-semibold text-slate-100">{usr?.username}</h2>
           </div>
 
           <div className="grid grid-cols-3 gap-3">
@@ -176,24 +176,27 @@ export default function JobPage() {
               { label: "Questions", value: interviewModel.questionCount ?? "—" },
               { label: "Status", value: interviewModel.status },
             ].map(({ label, value }) => (
-              <div key={label} className="surface rounded-md px-3 py-4 text-center">
-                <p className="text-lg font-semibold capitalize text-zinc-100">{value}</p>
-                <p className="mt-1 text-xs text-zinc-600">{label}</p>
+              <div key={label} className="surface rounded-lg px-3 py-4 text-center">
+                <p className="text-lg font-semibold capitalize text-slate-100">{value}</p>
+                <p className="mt-1 text-xs text-slate-600">{label}</p>
               </div>
             ))}
           </div>
 
           {interviewModel.integrityNotes && (
-            <GlassCard padding={false} className="p-4">
-              <p className="text-xs font-medium text-zinc-500">Integrity notes</p>
-              <p className="mt-1 text-sm text-zinc-400">{interviewModel.integrityNotes}</p>
+            <GlassCard padding={false} className="border-amber-500/10 bg-amber-500/[0.03] p-4">
+              <p className="text-xs font-medium text-amber-400/90">Integrity notes</p>
+              <p className="mt-1 text-sm text-slate-400">{interviewModel.integrityNotes}</p>
             </GlassCard>
           )}
 
           {interviewModel.cheatingFlags && interviewModel.cheatingFlags.length > 0 && (
             <div className="flex flex-wrap gap-2">
               {interviewModel.cheatingFlags.map((f) => (
-                <span key={f} className="rounded-md border border-zinc-800 bg-zinc-900 px-2 py-1 text-xs text-zinc-500">
+                <span
+                  key={f}
+                  className="rounded-md border border-slate-700/60 bg-slate-900/50 px-2 py-1 text-xs text-slate-500"
+                >
                   {f.replace(/_/g, " ")}
                 </span>
               ))}
@@ -201,20 +204,23 @@ export default function JobPage() {
           )}
 
           <GlassCard>
-            <p className="text-xs font-medium text-zinc-500">Summary</p>
-            <p className="mt-2 text-sm leading-relaxed text-zinc-400 whitespace-pre-wrap">
+            <p className="text-xs font-medium text-slate-500">Summary</p>
+            <p className="mt-2 whitespace-pre-wrap text-sm leading-relaxed text-slate-400">
               {interviewModel.interviewSummary || "No summary."}
             </p>
           </GlassCard>
 
           {snapshots.length > 0 && (
             <div>
-              <p className="mb-3 text-sm font-medium text-zinc-400">
+              <p className="mb-3 text-sm font-medium text-slate-400">
                 Session snapshots ({snapshots.length})
               </p>
               <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
                 {snapshots.map((shot, i) => (
-                  <div key={i} className="overflow-hidden rounded-md border border-zinc-800">
+                  <div
+                    key={i}
+                    className="overflow-hidden rounded-lg border border-slate-700/60 ring-1 ring-slate-800/50"
+                  >
                     <img
                       src={`data:image/jpeg;base64,${shot.data}`}
                       alt=""
@@ -226,7 +232,7 @@ export default function JobPage() {
             </div>
           )}
 
-          <div className="flex gap-3">
+          <div className="flex flex-wrap gap-3 border-t border-slate-800/80 pt-6">
             <GradientButton variant="success" onClick={() => handleStatusChange("accepted")}>
               Accept
             </GradientButton>
@@ -239,7 +245,7 @@ export default function JobPage() {
 
       {owner && !interviewModel && (
         <GlassCard>
-          <p className="text-sm text-zinc-500">No completed interviews for this role yet.</p>
+          <p className="text-sm text-slate-500">No completed interviews for this role yet.</p>
         </GlassCard>
       )}
     </div>

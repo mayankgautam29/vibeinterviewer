@@ -7,6 +7,7 @@ import { PageShell } from "@/components/ui/page-shell";
 import { PageHeader } from "@/components/ui/page-header";
 import { GlassCard } from "@/components/ui/glass-card";
 import { GradientButton } from "@/components/ui/gradient-button";
+import { BackLink } from "@/components/ui/back-link";
 
 export default function Jobnew() {
   const router = useRouter();
@@ -14,9 +15,11 @@ export default function Jobnew() {
   const [jobtitle, setJobtitle] = useState("");
   const [jobDesc, setJobDesc] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const onSubmit = async () => {
     if (!company || !jobtitle || !jobDesc) return;
+    setError("");
     try {
       setLoading(true);
       await axios.post("/api/createjob", {
@@ -25,8 +28,8 @@ export default function Jobnew() {
         company,
       });
       router.push("/jobs");
-    } catch (e) {
-      console.error(e);
+    } catch {
+      setError("Could not publish listing. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -34,27 +37,63 @@ export default function Jobnew() {
 
   return (
     <PageShell narrow>
+      <BackLink href="/jobs">Jobs</BackLink>
+
       <PageHeader
         badge="Recruiters"
         title="Post a job"
-        subtitle="Create a listing. Candidates will complete an AI interview when they apply."
+        subtitle="Create a listing. Candidates complete an adaptive interview when they apply."
         centered={false}
+        className="mt-6"
       />
 
       <GlassCard className="space-y-5">
         <div>
-          <label htmlFor="company" className="label-field">Company</label>
-          <input id="company" type="text" value={company} onChange={(e) => setCompany(e.target.value)} className="input-field" placeholder="Acme Inc." />
+          <label htmlFor="company" className="label-field">
+            Company
+          </label>
+          <input
+            id="company"
+            type="text"
+            value={company}
+            onChange={(e) => setCompany(e.target.value)}
+            className="input-field"
+            placeholder="Acme Inc."
+          />
         </div>
         <div>
-          <label htmlFor="jobtitle" className="label-field">Job title</label>
-          <input id="jobtitle" type="text" value={jobtitle} onChange={(e) => setJobtitle(e.target.value)} className="input-field" placeholder="Senior Engineer" />
+          <label htmlFor="jobtitle" className="label-field">
+            Job title
+          </label>
+          <input
+            id="jobtitle"
+            type="text"
+            value={jobtitle}
+            onChange={(e) => setJobtitle(e.target.value)}
+            className="input-field"
+            placeholder="Senior Engineer"
+          />
         </div>
         <div>
-          <label htmlFor="jobDesc" className="label-field">Description</label>
-          <textarea id="jobDesc" value={jobDesc} onChange={(e) => setJobDesc(e.target.value)} rows={6} className="input-field resize-none" placeholder="Role responsibilities, requirements, team context…" />
+          <label htmlFor="jobDesc" className="label-field">
+            Description
+          </label>
+          <textarea
+            id="jobDesc"
+            value={jobDesc}
+            onChange={(e) => setJobDesc(e.target.value)}
+            rows={6}
+            className="input-field resize-none"
+            placeholder="Role responsibilities, requirements, team context…"
+          />
         </div>
-        <GradientButton onClick={onSubmit} disabled={!company || !jobtitle || !jobDesc} loading={loading} fullWidth>
+        {error && <p className="text-sm text-red-400">{error}</p>}
+        <GradientButton
+          onClick={onSubmit}
+          disabled={!company || !jobtitle || !jobDesc}
+          loading={loading}
+          fullWidth
+        >
           Publish listing
         </GradientButton>
       </GlassCard>

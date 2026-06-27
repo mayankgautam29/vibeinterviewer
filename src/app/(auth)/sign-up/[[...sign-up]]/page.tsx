@@ -46,7 +46,7 @@ export default function CustomSignUpPage() {
       footer={
         <>
           Already registered?{" "}
-          <Link href="/sign-in" className="text-zinc-300 underline underline-offset-4 hover:text-white">
+          <Link href="/sign-in" className="text-sky-400 hover:underline">
             Sign in
           </Link>
         </>

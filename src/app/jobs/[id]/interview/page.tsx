@@ -15,6 +15,7 @@ import {
   Loader2,
 } from "lucide-react";
 import { GradientButton } from "@/components/ui/gradient-button";
+import { BackLink } from "@/components/ui/back-link";
 
 interface SpeechRecognitionResultItem {
   transcript: string;
@@ -385,6 +386,8 @@ export default function InterviewPage() {
 
   return (
     <div className="-mx-4 space-y-6 sm:-mx-6 lg:-mx-8">
+      <BackLink href={`/jobs/${jobId}`}>Back to job</BackLink>
+
       <div className="flex flex-col gap-4 border-b border-slate-700/50 pb-6 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="section-label mb-2">Live session</p>
@@ -448,13 +451,13 @@ export default function InterviewPage() {
               style={{ transform: "scaleX(-1)" }}
             />
             {isListening && (
-              <div className="absolute bottom-3 left-3 flex items-center gap-1.5 rounded-md bg-zinc-950/90 px-2.5 py-1 text-xs text-zinc-200">
+              <div className="absolute bottom-3 left-3 flex items-center gap-1.5 rounded-lg bg-slate-950/90 px-2.5 py-1 text-xs text-slate-200">
                 <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-red-500" />
                 Recording
               </div>
             )}
             {cameraError && (
-              <div className="absolute inset-0 flex items-center justify-center bg-zinc-950/95 p-4 text-center text-sm text-zinc-400">
+              <div className="absolute inset-0 flex items-center justify-center bg-slate-950/95 p-4 text-center text-sm text-slate-400">
                 {cameraError}
               </div>
             )}
@@ -517,7 +520,7 @@ export default function InterviewPage() {
                     <span className="text-slate-400">· Score {finalScore}/100</span>
                   )}
                 </div>
-                {endReason && <p className="text-xs text-zinc-500">{endReason}</p>}
+                {endReason && <p className="text-xs text-slate-500">{endReason}</p>}
                 <GradientButton variant="secondary" size="sm" onClick={() => router.push(`/jobs/${jobId}`)}>
                   Back to job
                 </GradientButton>

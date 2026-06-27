@@ -38,7 +38,7 @@ export default function CustomSignInPage() {
       footer={
         <>
           No account?{" "}
-          <Link href="/sign-up" className="text-zinc-300 underline underline-offset-4 hover:text-white">
+          <Link href="/sign-up" className="text-sky-400 hover:underline">
             Create one
           </Link>
         </>
