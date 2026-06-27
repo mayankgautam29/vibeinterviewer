@@ -3,7 +3,6 @@
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { Briefcase, Building2, FileText } from "lucide-react";
 import { PageShell } from "@/components/ui/page-shell";
 import { PageHeader } from "@/components/ui/page-header";
 import { GlassCard } from "@/components/ui/glass-card";
@@ -26,8 +25,8 @@ export default function Jobnew() {
         company,
       });
       router.push("/jobs");
-    } catch (error) {
-      console.error("Job creation failed:", error);
+    } catch (e) {
+      console.error(e);
     } finally {
       setLoading(false);
     }
@@ -37,63 +36,26 @@ export default function Jobnew() {
     <PageShell narrow>
       <PageHeader
         badge="Recruiters"
-        title="Post a New Job"
-        subtitle="Create a listing and let candidates complete AI-powered adaptive interviews."
+        title="Post a job"
+        subtitle="Create a listing. Candidates will complete an AI interview when they apply."
+        centered={false}
       />
 
       <GlassCard className="space-y-5">
         <div>
-          <label htmlFor="company" className="label-field">
-            <Building2 className="mr-1.5 inline h-4 w-4 text-slate-500" />
-            Company Name
-          </label>
-          <input
-            id="company"
-            type="text"
-            value={company}
-            onChange={(e) => setCompany(e.target.value)}
-            className="input-field"
-            placeholder="e.g., Acme Corp"
-          />
+          <label htmlFor="company" className="label-field">Company</label>
+          <input id="company" type="text" value={company} onChange={(e) => setCompany(e.target.value)} className="input-field" placeholder="Acme Inc." />
         </div>
-
         <div>
-          <label htmlFor="jobtitle" className="label-field">
-            <Briefcase className="mr-1.5 inline h-4 w-4 text-slate-500" />
-            Job Title
-          </label>
-          <input
-            id="jobtitle"
-            type="text"
-            value={jobtitle}
-            onChange={(e) => setJobtitle(e.target.value)}
-            className="input-field"
-            placeholder="e.g., Senior Frontend Engineer"
-          />
+          <label htmlFor="jobtitle" className="label-field">Job title</label>
+          <input id="jobtitle" type="text" value={jobtitle} onChange={(e) => setJobtitle(e.target.value)} className="input-field" placeholder="Senior Engineer" />
         </div>
-
         <div>
-          <label htmlFor="jobDesc" className="label-field">
-            <FileText className="mr-1.5 inline h-4 w-4 text-slate-500" />
-            Job Description
-          </label>
-          <textarea
-            id="jobDesc"
-            value={jobDesc}
-            onChange={(e) => setJobDesc(e.target.value)}
-            rows={6}
-            className="input-field resize-none"
-            placeholder="Describe the role, requirements, and what you're looking for..."
-          />
+          <label htmlFor="jobDesc" className="label-field">Description</label>
+          <textarea id="jobDesc" value={jobDesc} onChange={(e) => setJobDesc(e.target.value)} rows={6} className="input-field resize-none" placeholder="Role responsibilities, requirements, team context…" />
         </div>
-
-        <GradientButton
-          onClick={onSubmit}
-          disabled={!company || !jobtitle || !jobDesc}
-          loading={loading}
-          fullWidth
-        >
-          Publish Job Listing
+        <GradientButton onClick={onSubmit} disabled={!company || !jobtitle || !jobDesc} loading={loading} fullWidth>
+          Publish listing
         </GradientButton>
       </GlassCard>
     </PageShell>

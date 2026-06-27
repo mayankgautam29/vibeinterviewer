@@ -10,14 +10,6 @@ export function PageShell({
   narrow?: boolean;
 }) {
   return (
-    <div
-      className={cn(
-        "mx-auto w-full px-4 py-8 sm:py-12",
-        narrow ? "max-w-2xl" : "max-w-7xl",
-        className
-      )}
-    >
-      {children}
-    </div>
+    <div className={cn(narrow && "mx-auto max-w-lg", className)}>{children}</div>
   );
 }

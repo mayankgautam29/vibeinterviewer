@@ -14,6 +14,7 @@ import {
   CheckCircle2,
   Loader2,
 } from "lucide-react";
+import { GradientButton } from "@/components/ui/gradient-button";
 
 interface SpeechRecognitionResultItem {
   transcript: string;
@@ -383,187 +384,169 @@ export default function InterviewPage() {
       : 0;
 
   return (
-    <div className="mx-auto max-w-7xl space-y-6 px-4 py-6">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <div className="-mx-4 space-y-6 sm:-mx-6 lg:-mx-8">
+      <div className="flex flex-col gap-4 border-b border-zinc-800 pb-6 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h1 className="gradient-text text-2xl font-bold md:text-3xl">AI Interview Session</h1>
-          <p className="mt-1 text-sm text-slate-400">
-            Adaptive interview — questions follow your answers until the AI has enough signal.
+          <p className="section-label mb-2">Live session</p>
+          <h1 className="text-xl font-semibold tracking-tight text-zinc-50 sm:text-2xl">
+            Interview
+          </h1>
+          <p className="mt-1 text-sm text-zinc-500">
+            Answer by voice or text. Questions adapt to your responses.
           </p>
         </div>
-        <div className="flex flex-wrap items-center gap-2">
-            <span
-              className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium ${
-                socketReady
-                  ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/40"
-                  : "bg-amber-500/20 text-amber-300 border border-amber-500/40"
-              }`}
-            >
-              {socketReady ? <Wifi className="w-3.5 h-3.5" /> : <WifiOff className="w-3.5 h-3.5" />}
-              {socketReady ? "Connected" : "Connecting..."}
+        <div className="flex flex-wrap gap-2 text-xs text-zinc-500">
+          <span className="inline-flex items-center gap-1.5 rounded-md border border-zinc-800 px-2.5 py-1">
+            {socketReady ? <Wifi className="h-3.5 w-3.5 text-emerald-500" /> : <WifiOff className="h-3.5 w-3.5" />}
+            {socketReady ? "Connected" : "Connecting"}
+          </span>
+          {started && !interviewEnded && runningScore != null && (
+            <span className="rounded-md border border-zinc-800 px-2.5 py-1">
+              Avg {runningScore.toFixed(1)}/10
             </span>
-            {started && !interviewEnded && runningScore != null && (
-              <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium bg-cyan-500/20 text-cyan-200 border border-cyan-500/40">
-                Quality: {runningScore.toFixed(1)}/10
-              </span>
-            )}
-            {started && !interviewEnded && (
-              <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium bg-indigo-500/20 text-indigo-200 border border-indigo-500/40">
-                <Camera className="w-3.5 h-3.5" />
-                {snapshotCount} snapshots
-              </span>
-            )}
+          )}
+          {started && !interviewEnded && (
+            <span className="inline-flex items-center gap-1 rounded-md border border-zinc-800 px-2.5 py-1">
+              <Camera className="h-3.5 w-3.5" />
+              {snapshotCount} saved
+            </span>
+          )}
         </div>
       </div>
 
       {started && !interviewEnded && (
-          <div className="bg-slate-900/60 border border-slate-700 rounded-xl p-4">
-            <div className="flex justify-between text-sm mb-2">
-              <span className="text-slate-300">
-                Question {questionNumber || 1} · Adaptive ({minQuestions}–{maxQuestions} questions)
+        <div className="space-y-2">
+          <div className="flex justify-between text-xs text-zinc-500">
+            <span>
+              Question {questionNumber || 1} · {minQuestions}–{maxQuestions} expected
+            </span>
+            {isEvaluating ? (
+              <span className="flex items-center gap-1">
+                <Loader2 className="h-3 w-3 animate-spin" />
+                Evaluating
               </span>
-              {isEvaluating ? (
-                <span className="text-amber-300 flex items-center gap-1">
-                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                  Evaluating answer...
-                </span>
-              ) : (
-                <span className="text-cyan-300">{progressPercent}% depth</span>
-              )}
-            </div>
-            <div className="h-2 bg-slate-800 rounded-full overflow-hidden">
-              <div
-                className="h-full bg-gradient-to-r from-cyan-500 to-indigo-500 transition-all duration-500"
-                style={{ width: `${Math.max(progressPercent, started ? 8 : 0)}%` }}
-              />
-            </div>
+            ) : null}
           </div>
-        )}
-
-        <div className="grid lg:grid-cols-5 gap-6">
-          <div className="lg:col-span-2 space-y-3">
-            <div className="relative aspect-video rounded-2xl overflow-hidden bg-black border border-slate-700 shadow-2xl">
-              <video
-                ref={videoRef}
-                autoPlay
-                playsInline
-                muted
-                className="w-full h-full object-cover mirror"
-                style={{ transform: "scaleX(-1)" }}
-              />
-              {isListening && (
-                <div className="absolute bottom-3 left-3 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-red-500/80 text-xs font-medium animate-pulse">
-                  <Mic className="w-3.5 h-3.5" />
-                  Listening...
-                </div>
-              )}
-              {cameraError && (
-                <div className="absolute inset-0 flex items-center justify-center bg-slate-900/90 p-4 text-center text-sm text-amber-200">
-                  {cameraError}
-                </div>
-              )}
-            </div>
-            <p className="text-xs text-slate-500 text-center">
-              Periodic snapshots are captured for interview review (every 30s).
-            </p>
+          <div className="h-1 overflow-hidden rounded-full bg-zinc-800">
+            <div
+              className="h-full bg-zinc-400 transition-all duration-500"
+              style={{ width: `${Math.max(progressPercent, started ? 6 : 0)}%` }}
+            />
           </div>
+        </div>
+      )}
 
-          <div className="lg:col-span-3 flex flex-col min-h-[500px] bg-slate-900/50 border border-slate-700 rounded-2xl overflow-hidden">
-            <div className="flex-1 overflow-y-auto p-4 space-y-3 max-h-[50vh] lg:max-h-none">
-              {messages.length === 0 && (
-                <div className="text-center text-slate-500 py-12">
-                  Click Start Interview when you are ready.
-                </div>
-              )}
-              {messages.map((msg, idx) => (
-                <div
-                  key={idx}
-                  className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
-                >
+      <div className="grid gap-6 lg:grid-cols-5">
+        <div className="space-y-2 lg:col-span-2">
+          <div className="relative aspect-video overflow-hidden rounded-md border border-zinc-800 bg-black">
+            <video
+              ref={videoRef}
+              autoPlay
+              playsInline
+              muted
+              className="h-full w-full object-cover"
+              style={{ transform: "scaleX(-1)" }}
+            />
+            {isListening && (
+              <div className="absolute bottom-3 left-3 flex items-center gap-1.5 rounded-md bg-zinc-950/90 px-2.5 py-1 text-xs text-zinc-200">
+                <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-red-500" />
+                Recording
+              </div>
+            )}
+            {cameraError && (
+              <div className="absolute inset-0 flex items-center justify-center bg-zinc-950/95 p-4 text-center text-sm text-zinc-400">
+                {cameraError}
+              </div>
+            )}
+          </div>
+          <p className="text-center text-xs text-zinc-600">
+            Session snapshots saved every 30 seconds for review.
+          </p>
+        </div>
+
+        <div className="flex min-h-[480px] flex-col overflow-hidden rounded-md border border-zinc-800 lg:col-span-3">
+          <div className="flex-1 space-y-4 overflow-y-auto p-4">
+            {messages.length === 0 && (
+              <p className="py-16 text-center text-sm text-zinc-600">
+                Press start when you&apos;re ready.
+              </p>
+            )}
+            {messages.map((msg, idx) => (
+              <div key={idx} className={msg.role === "user" ? "text-right" : "text-left"}>
+                {msg.role === "system" ? (
+                  <p className="text-center text-xs text-zinc-600">{msg.text}</p>
+                ) : (
                   <div
-                    className={`max-w-[85%] px-4 py-3 rounded-2xl text-sm leading-relaxed ${
+                    className={`inline-block max-w-[90%] rounded-md px-3.5 py-2.5 text-sm leading-relaxed ${
                       msg.role === "user"
-                        ? "bg-indigo-600 text-white rounded-br-md"
-                        : msg.role === "ai"
-                          ? "bg-slate-800 text-slate-100 border border-slate-600 rounded-bl-md"
-                          : "bg-slate-800/50 text-slate-400 text-center w-full max-w-full text-xs"
+                        ? "bg-zinc-100 text-zinc-950"
+                        : "border border-zinc-800 bg-zinc-900 text-zinc-300"
                     }`}
                   >
                     {msg.role === "ai" && (
-                      <span className="block text-xs text-cyan-400 mb-1 font-medium">
+                      <span className="mb-1 block text-[10px] font-medium uppercase tracking-wider text-zinc-500">
                         Interviewer
                       </span>
                     )}
                     {msg.text}
                   </div>
-                </div>
-              ))}
-            </div>
+                )}
+              </div>
+            ))}
+          </div>
 
-            <div className="border-t border-slate-700 p-4 space-y-3 bg-slate-950/50">
-              {!started && !interviewEnded && (
+          <div className="border-t border-zinc-800 p-4">
+            {!started && !interviewEnded && (
+              <GradientButton
+                onClick={handleStartInterview}
+                disabled={!socketReady || loading}
+                loading={loading}
+                fullWidth
+              >
+                {!loading && <Mic className="h-4 w-4" />}
+                Start interview
+              </GradientButton>
+            )}
+
+            {interviewEnded && (
+              <div className="space-y-3 rounded-md border border-zinc-800 bg-zinc-900/50 p-4">
+                <div className="flex items-center gap-2 text-sm text-zinc-200">
+                  <CheckCircle2 className="h-4 w-4 text-emerald-500" />
+                  Session complete
+                  {finalScore != null && (
+                    <span className="text-zinc-500">· Score {finalScore}/100</span>
+                  )}
+                </div>
+                {endReason && <p className="text-xs text-zinc-500">{endReason}</p>}
+                <GradientButton variant="secondary" size="sm" onClick={() => router.push(`/jobs/${jobId}`)}>
+                  Back to job
+                </GradientButton>
+              </div>
+            )}
+
+            {started && !interviewEnded && (
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && submitAnswer(input)}
+                  placeholder="Type your answer…"
+                  className="input-field flex-1"
+                />
                 <button
-                  onClick={handleStartInterview}
-                  disabled={!socketReady || loading}
-                  className="w-full flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold bg-gradient-to-r from-emerald-600 to-cyan-600 hover:from-emerald-500 hover:to-cyan-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                  type="button"
+                  onClick={() => submitAnswer(input)}
+                  disabled={!input.trim()}
+                  className="rounded-md border border-zinc-700 px-3 text-zinc-300 transition hover:border-zinc-500 hover:text-white disabled:opacity-30"
                 >
-                  {loading ? (
-                    <>
-                      <Loader2 className="w-5 h-5 animate-spin" />
-                      Preparing...
-                    </>
-                  ) : (
-                    <>
-                      <Mic className="w-5 h-5" />
-                      Start Interview
-                    </>
-                  )}
+                  <Send className="h-4 w-4" />
                 </button>
-              )}
-
-              {interviewEnded && (
-                <div className="flex flex-col gap-3 p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/30">
-                  <div className="flex items-center gap-2 text-emerald-300">
-                    <CheckCircle2 className="w-5 h-5" />
-                    Interview completed
-                    {finalScore != null && (
-                      <span className="ml-2 text-white font-semibold">Score: {finalScore}/100</span>
-                    )}
-                  </div>
-                  {endReason && (
-                    <p className="text-sm text-slate-400">{endReason}</p>
-                  )}
-                  <button
-                    onClick={() => router.push(`/jobs/${jobId}`)}
-                    className="self-start px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-sm font-medium"
-                  >
-                    Back to Job
-                  </button>
-                </div>
-              )}
-
-              {started && !interviewEnded && (
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    value={input}
-                    onChange={(e) => setInput(e.target.value)}
-                    onKeyDown={(e) => e.key === "Enter" && submitAnswer(input)}
-                    placeholder="Type your answer or use voice..."
-                    className="input-field flex-1 text-sm"
-                  />
-                  <button
-                    onClick={() => submitAnswer(input)}
-                    disabled={!input.trim()}
-                    className="px-4 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-                  >
-                    <Send className="w-5 h-5" />
-                  </button>
-                </div>
-              )}
-            </div>
+              </div>
+            )}
           </div>
         </div>
+      </div>
       <audio ref={audioRef} hidden />
     </div>
   );

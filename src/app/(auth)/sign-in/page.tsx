@@ -25,7 +25,7 @@ export default function CustomSignInPage() {
         window.location.href = "/";
       }
     } catch (err: any) {
-      setError(err.errors?.[0]?.longMessage || "Invalid credentials.");
+      setError(err.errors?.[0]?.longMessage || "Invalid email or password.");
     } finally {
       setLoading(false);
     }
@@ -33,13 +33,13 @@ export default function CustomSignInPage() {
 
   return (
     <AuthLayout
-      title="Welcome back"
-      subtitle="Sign in to continue your interview journey"
+      title="Sign in"
+      subtitle="Access your account to apply and manage interviews."
       footer={
         <>
-          Don&apos;t have an account?{" "}
-          <Link href="/sign-up" className="text-cyan-400 hover:underline">
-            Sign up
+          No account?{" "}
+          <Link href="/sign-up" className="text-zinc-300 underline underline-offset-4 hover:text-white">
+            Create one
           </Link>
         </>
       }
@@ -47,15 +47,15 @@ export default function CustomSignInPage() {
       <form onSubmit={handleSignIn} className="space-y-4">
         <div>
           <label className="label-field">Email</label>
-          <input type="email" className="input-field" value={email} onChange={(e) => setEmail(e.target.value)} required />
+          <input type="email" className="input-field" value={email} onChange={(e) => setEmail(e.target.value)} required autoComplete="email" />
         </div>
         <div>
           <label className="label-field">Password</label>
-          <input type="password" className="input-field" value={password} onChange={(e) => setPassword(e.target.value)} required />
+          <input type="password" className="input-field" value={password} onChange={(e) => setPassword(e.target.value)} required autoComplete="current-password" />
         </div>
-        {error && <p className="rounded-lg bg-rose-500/10 border border-rose-500/20 px-3 py-2 text-sm text-rose-300">{error}</p>}
+        {error && <p className="text-sm text-red-400">{error}</p>}
         <GradientButton type="submit" loading={loading} fullWidth>
-          Sign In
+          Sign in
         </GradientButton>
       </form>
     </AuthLayout>

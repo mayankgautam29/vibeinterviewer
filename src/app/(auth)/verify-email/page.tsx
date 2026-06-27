@@ -33,26 +33,24 @@ export default function VerifyEmailPage() {
   };
 
   return (
-    <AuthLayout title="Verify your email" subtitle="Enter the 6-digit code we sent to your inbox">
+    <AuthLayout title="Verify email" subtitle="Enter the code sent to your inbox.">
       <form onSubmit={handleVerify} className="space-y-4">
         <div>
           <label className="label-field">Verification code</label>
           <input
             type="text"
+            inputMode="numeric"
             value={otpCode}
             onChange={(e) => setOtpCode(e.target.value)}
-            placeholder="123456"
-            className="input-field text-center text-2xl tracking-[0.5em] font-mono"
+            className="input-field text-center font-mono tracking-widest"
+            placeholder="000000"
             required
           />
         </div>
-        {error && <p className="rounded-lg bg-rose-500/10 border border-rose-500/20 px-3 py-2 text-sm text-rose-300">{error}</p>}
+        {error && <p className="text-sm text-red-400">{error}</p>}
         <GradientButton type="submit" loading={loading} fullWidth>
-          Verify Email
+          Verify
         </GradientButton>
-        <p className="text-center text-xs text-slate-500">
-          Didn&apos;t receive it? Check your spam folder.
-        </p>
       </form>
     </AuthLayout>
   );

@@ -3,31 +3,26 @@
 import Link from "next/link";
 import { useAuth, useClerk } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
-import { LogIn, LogOut } from "lucide-react";
 
 export default function AuthButton() {
   const { isSignedIn } = useAuth();
   const { signOut } = useClerk();
   const [mounted, setMounted] = useState(false);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  useEffect(() => setMounted(true), []);
 
   if (!mounted) {
-    return (
-      <div className="h-9 w-24 animate-pulse rounded-full bg-white/10" />
-    );
+    return <div className="h-8 w-20 animate-pulse rounded-md bg-zinc-800" />;
   }
 
   if (isSignedIn) {
     return (
       <button
+        type="button"
         onClick={() => signOut()}
-        className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm font-medium text-white transition hover:border-rose-500/40 hover:bg-rose-500/10 hover:text-rose-200"
+        className="rounded-md border border-zinc-700 px-3.5 py-1.5 text-sm text-zinc-300 transition-colors hover:border-zinc-600 hover:text-zinc-100"
       >
-        <LogOut className="h-4 w-4" />
-        Logout
+        Sign out
       </button>
     );
   }
@@ -35,10 +30,9 @@ export default function AuthButton() {
   return (
     <Link
       href="/sign-in"
-      className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-cyan-500 to-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-cyan-500/20 transition hover:brightness-110"
+      className="rounded-md bg-zinc-100 px-3.5 py-1.5 text-sm font-medium text-zinc-950 transition-colors hover:bg-white"
     >
-      <LogIn className="h-4 w-4" />
-      Sign In
+      Sign in
     </Link>
   );
 }

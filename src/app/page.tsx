@@ -1,174 +1,148 @@
-"use client";
-
-import { motion } from "framer-motion";
-import type { Variants } from "framer-motion";
-import { useEffect, useState } from "react";
-import Link from "next/link";
 import {
-  Brain,
-  Mic,
+  ArrowRight,
+  BarChart3,
+  FileText,
+  MessageSquare,
   Shield,
-  Sparkles,
-  Target,
-  TrendingUp,
-  Upload,
-  Video,
-  Zap,
+  Users,
 } from "lucide-react";
-import { PageShell } from "@/components/ui/page-shell";
-import { GlassCard } from "@/components/ui/glass-card";
 import { GradientButton } from "@/components/ui/gradient-button";
-
-const fadeInUp: Variants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
-};
+import { GlassCard } from "@/components/ui/glass-card";
 
 const features = [
-  { icon: Brain, title: "Adaptive AI Interviews", desc: "Follow-up questions that probe your real experience, not a fixed script." },
-  { icon: Mic, title: "Voice & Text Answers", desc: "Speak naturally or type — the AI adapts to how you communicate best." },
-  { icon: Target, title: "Resume-Tailored Questions", desc: "Vector-indexed resume context drives relevant, role-specific interviews." },
-  { icon: Shield, title: "Integrity Monitoring", desc: "Snapshot capture and answer analysis help detect suspicious responses." },
-  { icon: TrendingUp, title: "Live Quality Scoring", desc: "Real-time evaluation so interviews end when enough signal is gathered." },
-  { icon: Video, title: "Recruiter Review", desc: "Hiring managers see scores, summaries, snapshots, and integrity notes." },
+  {
+    icon: MessageSquare,
+    title: "Adaptive interviews",
+    description:
+      "Questions follow the candidate's answers instead of running through a fixed script.",
+  },
+  {
+    icon: FileText,
+    title: "Resume-aware questioning",
+    description:
+      "Uploaded resumes are indexed so interviewers ask about relevant skills and experience.",
+  },
+  {
+    icon: Shield,
+    title: "Integrity signals",
+    description:
+      "Response analysis and session snapshots give recruiters more context when reviewing candidates.",
+  },
+  {
+    icon: BarChart3,
+    title: "Structured scoring",
+    description:
+      "Each session produces a summary, score, and notes recruiters can act on immediately.",
+  },
 ];
 
 const steps = [
-  { step: "01", title: "Upload Resume", desc: "PDF or DOCX — we summarize and index it for smart question generation.", icon: Upload },
-  { step: "02", title: "Start Interview", desc: "Camera on, mic ready. Adaptive questions based on your profile and answers.", icon: Sparkles },
-  { step: "03", title: "Get Evaluated", desc: "AI scores your performance and sends results to recruiters instantly.", icon: Zap },
+  { n: "01", title: "Upload a resume", body: "Candidates add a PDF or DOCX before applying." },
+  { n: "02", title: "Complete the interview", body: "Voice or text responses in a guided session." },
+  { n: "03", title: "Review results", body: "Recruiters see scores, summaries, and session data." },
 ];
 
 export default function Home() {
-  const rotatingTexts = [
-    "Adaptive AI Interviews",
-    "Real-Time Feedback",
-    "Resume-Based Questions",
-    "Voice & Text Support",
-  ];
-  const [rotatingIndex, setRotatingIndex] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setRotatingIndex((prev) => (prev + 1) % rotatingTexts.length);
-    }, 2500);
-    return () => clearInterval(interval);
-  }, [rotatingTexts.length]);
-
   return (
-    <div className="overflow-hidden">
+    <div className="space-y-24 pb-8">
       {/* Hero */}
-      <PageShell className="pb-20 pt-8">
-        <motion.div
-          initial="hidden"
-          animate="visible"
-          variants={{ visible: { transition: { staggerChildren: 0.1 } } }}
-          className="mx-auto max-w-4xl text-center"
-        >
-          <motion.span
-            variants={fadeInUp}
-            className="mb-6 inline-flex items-center gap-2 rounded-full border border-cyan-500/30 bg-cyan-500/10 px-4 py-1.5 text-xs font-medium uppercase tracking-widest text-cyan-300"
-          >
-            <Sparkles className="h-3.5 w-3.5" />
-            AI-Powered Hiring Platform
-          </motion.span>
-
-          <motion.h1 variants={fadeInUp} className="gradient-text text-5xl font-bold leading-tight sm:text-6xl lg:text-7xl">
-            Ace Your Next Interview with AI
-          </motion.h1>
-
-          <motion.p variants={fadeInUp} className="mt-6 h-8 text-xl font-medium text-cyan-200/80">
-            {rotatingTexts[rotatingIndex]}
-          </motion.p>
-
-          <motion.p variants={fadeInUp} className="mx-auto mt-4 max-w-2xl text-lg text-slate-400">
-            Practice with adaptive mock interviews, get instant feedback, and apply to jobs — all in one platform built for modern hiring.
-          </motion.p>
-
-          <motion.div variants={fadeInUp} className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-            <GradientButton href="/jobs" variant="primary">
-              Browse Jobs
-            </GradientButton>
-            <GradientButton href="/resume" variant="violet">
-              Upload Resume
-            </GradientButton>
-          </motion.div>
-        </motion.div>
-      </PageShell>
+      <section className="mx-auto max-w-3xl pt-4 text-center sm:pt-10">
+        <p className="section-label mb-4">AI interview platform</p>
+        <h1 className="text-4xl font-semibold tracking-tight text-zinc-50 sm:text-5xl sm:leading-[1.1]">
+          Hire and interview with clarity, not guesswork
+        </h1>
+        <p className="mx-auto mt-5 max-w-xl text-lg leading-relaxed text-zinc-400">
+          VibeInterviewer helps candidates practice and apply, and gives recruiters structured
+          interview results they can trust.
+        </p>
+        <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+          <GradientButton href="/jobs">Browse open roles</GradientButton>
+          <GradientButton href="/jobnew" variant="secondary">
+            Post a job
+            <ArrowRight className="h-4 w-4" />
+          </GradientButton>
+        </div>
+      </section>
 
       {/* Features */}
-      <PageShell className="py-16">
-        <div className="mb-12 text-center">
-          <h2 className="gradient-text text-3xl font-bold sm:text-4xl">Why VibeInterviewer?</h2>
-          <p className="mt-3 text-slate-400">Everything you need to prepare and get hired.</p>
+      <section>
+        <div className="mb-8">
+          <p className="section-label mb-2">Platform</p>
+          <h2 className="text-2xl font-semibold tracking-tight text-zinc-100">
+            Built for both sides of the hiring table
+          </h2>
         </div>
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {features.map(({ icon: Icon, title, desc }) => (
-            <GlassCard key={title} hover className="group">
-              <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-500/20 to-indigo-500/20 text-cyan-400 transition group-hover:scale-110">
-                <Icon className="h-5 w-5" />
-              </div>
-              <h3 className="text-lg font-semibold text-white">{title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-slate-400">{desc}</p>
+        <div className="grid gap-4 sm:grid-cols-2">
+          {features.map(({ icon: Icon, title, description }) => (
+            <GlassCard key={title} hover={false}>
+              <Icon className="mb-4 h-5 w-5 text-zinc-400" strokeWidth={1.5} />
+              <h3 className="font-medium text-zinc-100">{title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-zinc-500">{description}</p>
             </GlassCard>
           ))}
         </div>
-      </PageShell>
+      </section>
 
       {/* How it works */}
-      <PageShell className="py-16">
-        <div className="mb-12 text-center">
-          <h2 className="gradient-text text-3xl font-bold">How It Works</h2>
+      <section>
+        <div className="mb-8">
+          <p className="section-label mb-2">Workflow</p>
+          <h2 className="text-2xl font-semibold tracking-tight text-zinc-100">How it works</h2>
         </div>
-        <div className="grid gap-6 md:grid-cols-3">
-          {steps.map(({ step, title, desc, icon: Icon }) => (
-            <GlassCard key={step} className="relative overflow-hidden">
-              <span className="absolute -right-2 -top-4 text-7xl font-black text-white/[0.03]">{step}</span>
-              <Icon className="mb-4 h-8 w-8 text-cyan-400" />
-              <h3 className="text-xl font-bold text-white">{title}</h3>
-              <p className="mt-2 text-sm text-slate-400">{desc}</p>
-            </GlassCard>
+        <div className="grid gap-4 md:grid-cols-3">
+          {steps.map(({ n, title, body }) => (
+            <div key={n} className="border-l border-zinc-800 pl-5">
+              <span className="font-mono text-xs text-zinc-600">{n}</span>
+              <h3 className="mt-2 font-medium text-zinc-100">{title}</h3>
+              <p className="mt-1.5 text-sm leading-relaxed text-zinc-500">{body}</p>
+            </div>
           ))}
         </div>
-      </PageShell>
+      </section>
 
       {/* Sample */}
-      <PageShell narrow className="py-16">
-        <GlassCard className="glow-ring">
-          <p className="mb-2 text-xs font-medium uppercase tracking-wider text-cyan-400">Sample Exchange</p>
+      <section>
+        <GlassCard className="max-w-2xl">
+          <p className="section-label mb-4">Example exchange</p>
           <div className="space-y-4 text-sm">
-            <div className="rounded-xl bg-indigo-500/10 p-4 border border-indigo-500/20">
-              <span className="font-semibold text-indigo-300">Interviewer:</span>
-              <p className="mt-1 text-slate-300">You mentioned building a FastAPI service — walk me through how you handled authentication.</p>
+            <div>
+              <p className="mb-1 text-xs font-medium text-zinc-500">Interviewer</p>
+              <p className="text-zinc-300">
+                You mentioned a payments API — how did you handle idempotency for retries?
+              </p>
             </div>
-            <div className="rounded-xl bg-white/5 p-4 border border-white/10">
-              <span className="font-semibold text-slate-300">You:</span>
-              <p className="mt-1 text-slate-400">We used JWT with refresh tokens stored in HTTP-only cookies...</p>
+            <div className="border-t border-zinc-800 pt-4">
+              <p className="mb-1 text-xs font-medium text-zinc-500">Candidate</p>
+              <p className="text-zinc-400">
+                We stored a client-supplied key in Redis with a short TTL before processing...
+              </p>
             </div>
-            <div className="rounded-xl bg-emerald-500/10 p-4 border border-emerald-500/20">
-              <span className="font-semibold text-emerald-300">AI Evaluation:</span>
-              <p className="mt-1 text-slate-300">Strong technical depth. Follow-up: ask about token rotation edge cases.</p>
+            <div className="border-t border-zinc-800 pt-4">
+              <p className="mb-1 text-xs font-medium text-zinc-500">Evaluation</p>
+              <p className="text-zinc-400">
+                Strong technical depth. Follow-up recommended on failure handling.
+              </p>
             </div>
           </div>
         </GlassCard>
-      </PageShell>
+      </section>
 
       {/* CTA */}
-      <PageShell className="py-20 text-center">
-        <h2 className="gradient-text text-3xl font-bold sm:text-4xl">Ready to Get Started?</h2>
-        <p className="mx-auto mt-4 max-w-lg text-slate-400">
-          Join candidates who practice smarter and recruiters who hire with confidence.
+      <section className="surface rounded-lg px-6 py-10 text-center sm:px-10">
+        <Users className="mx-auto mb-4 h-6 w-6 text-zinc-500" strokeWidth={1.5} />
+        <h2 className="text-xl font-semibold text-zinc-100">Ready to get started?</h2>
+        <p className="mx-auto mt-2 max-w-md text-sm text-zinc-500">
+          Create an account, upload your resume, and apply to open roles in minutes.
         </p>
-        <div className="mt-8">
-          <GradientButton href="/jobs" variant="success" className="px-10 py-4 text-base">
-            Start Practicing Now
+        <div className="mt-6">
+          <GradientButton href="/sign-up" variant="primary">
+            Create account
           </GradientButton>
         </div>
-      </PageShell>
+      </section>
 
-      <footer className="border-t border-white/10 py-10 text-center text-sm text-slate-500">
-        <p>&copy; {new Date().getFullYear()} VibeInterviewer. All rights reserved.</p>
-        <p className="mt-2 text-xs text-slate-600">Private · Encrypted · GDPR conscious</p>
+      <footer className="border-t border-zinc-800 pt-8 text-center text-xs text-zinc-600">
+        <p>© {new Date().getFullYear()} VibeInterviewer</p>
       </footer>
     </div>
   );

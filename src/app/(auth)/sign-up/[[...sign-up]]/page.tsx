@@ -41,12 +41,12 @@ export default function CustomSignUpPage() {
 
   return (
     <AuthLayout
-      title="Create an account"
-      subtitle="Start practicing interviews and applying to jobs"
+      title="Create account"
+      subtitle="Start applying to roles and completing AI interviews."
       footer={
         <>
-          Already have an account?{" "}
-          <Link href="/sign-in" className="text-cyan-400 hover:underline">
+          Already registered?{" "}
+          <Link href="/sign-in" className="text-zinc-300 underline underline-offset-4 hover:text-white">
             Sign in
           </Link>
         </>
@@ -55,20 +55,20 @@ export default function CustomSignUpPage() {
       <form onSubmit={handleSignUp} className="space-y-4">
         <div>
           <label className="label-field">Username</label>
-          <input type="text" className="input-field" placeholder="johndoe" value={username} onChange={(e) => setUsername(e.target.value)} required />
+          <input type="text" className="input-field" value={username} onChange={(e) => setUsername(e.target.value)} required />
         </div>
         <div>
           <label className="label-field">Email</label>
-          <input type="email" className="input-field" placeholder="you@example.com" value={email} onChange={(e) => setEmail(e.target.value)} required />
+          <input type="email" className="input-field" value={email} onChange={(e) => setEmail(e.target.value)} required />
         </div>
         <div>
           <label className="label-field">Password</label>
-          <input type="password" className="input-field" placeholder="••••••••" value={password} onChange={(e) => setPassword(e.target.value)} required />
+          <input type="password" className="input-field" value={password} onChange={(e) => setPassword(e.target.value)} required />
         </div>
-        <div id="clerk-captcha" style={{ display: "none" }} />
-        {error && <p className="rounded-lg bg-rose-500/10 border border-rose-500/20 px-3 py-2 text-sm text-rose-300">{error}</p>}
-        <GradientButton type="submit" loading={loading} variant="violet" fullWidth>
-          Create Account
+        <div id="clerk-captcha" className="hidden" />
+        {error && <p className="text-sm text-red-400">{error}</p>}
+        <GradientButton type="submit" loading={loading} fullWidth>
+          Create account
         </GradientButton>
       </form>
     </AuthLayout>

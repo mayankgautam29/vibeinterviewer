@@ -3,13 +3,10 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { FileText, Mail, User as UserIcon } from "lucide-react";
-import { PageShell } from "@/components/ui/page-shell";
 import { PageHeader } from "@/components/ui/page-header";
 import { GlassCard } from "@/components/ui/glass-card";
 import { GradientButton } from "@/components/ui/gradient-button";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
-import { Skeleton } from "@/components/ui/skeleton";
 
 export default function ProfilePage() {
   const [user, setUser] = useState<any>(null);
@@ -24,75 +21,60 @@ export default function ProfilePage() {
       .finally(() => setLoading(false));
   }, []);
 
-  if (loading) {
-    return (
-      <PageShell narrow>
-        <GlassCard className="space-y-4">
-          <Skeleton className="mx-auto h-24 w-24 rounded-full" />
-          <Skeleton className="mx-auto h-6 w-40" />
-          <Skeleton className="h-4 w-full" />
-        </GlassCard>
-      </PageShell>
-    );
-  }
-
+  if (loading) return <LoadingSpinner label="Loading profile…" />;
   if (!user) return <LoadingSpinner label="Could not load profile" />;
 
   const hasResume = Boolean(user.resume);
 
   return (
-    <PageShell narrow>
-      <PageHeader badge="Account" title="Your Profile" subtitle="Manage your account and interview readiness." />
+    <div className="mx-auto max-w-md">
+      <PageHeader badge="Account" title="Profile" centered={false} />
 
       <GlassCard className="text-center">
-        <div className="relative mx-auto mb-6 h-28 w-28">
-          {user.profileImg ? (
-            <img
-              src={user.profileImg}
-              alt="Profile"
-              className="h-full w-full rounded-full object-cover ring-4 ring-cyan-500/30 shadow-xl"
-            />
-          ) : (
-            <div className="flex h-full w-full items-center justify-center rounded-full bg-gradient-to-br from-cyan-500/20 to-indigo-500/20 ring-4 ring-white/10">
-              <UserIcon className="h-12 w-12 text-slate-400" />
-            </div>
-          )}
-          <span className={`absolute bottom-1 right-1 h-4 w-4 rounded-full border-2 border-slate-900 ${hasResume ? "bg-emerald-400" : "bg-amber-400"}`} />
-        </div>
-
-        <h2 className="text-2xl font-bold text-white">{user.username}</h2>
-        <div className="mt-2 flex items-center justify-center gap-2 text-slate-400">
-          <Mail className="h-4 w-4" />
-          {user.email}
-        </div>
-
-        <div className="mt-8 grid gap-4 sm:grid-cols-2">
-          <div className="rounded-xl border border-white/10 bg-white/[0.03] p-4">
-            <FileText className="mx-auto h-6 w-6 text-violet-400 mb-2" />
-            <p className="text-sm font-medium text-white">Resume</p>
-            <p className="text-xs text-slate-500 mt-1">
-              {hasResume ? "Uploaded & indexed" : "Not uploaded yet"}
-            </p>
-          </div>
-          <div className="rounded-xl border border-white/10 bg-white/[0.03] p-4">
-            <UserIcon className="mx-auto h-6 w-6 text-cyan-400 mb-2" />
-            <p className="text-sm font-medium text-white">Interview Ready</p>
-            <p className="text-xs text-slate-500 mt-1">
-              {hasResume ? "Ready to apply" : "Upload resume first"}
-            </p>
-          </div>
-        </div>
-
-        {!hasResume ? (
-          <GradientButton variant="violet" className="mt-8" onClick={() => router.push("/resume")}>
-            Upload Resume
-          </GradientButton>
+        {user.profileImg ? (
+          <img
+            src={user.profileImg}
+            alt=""
+            className="mx-auto h-20 w-20 rounded-full border border-zinc-800 object-cover"
+          />
         ) : (
-          <GradientButton href="/jobs" className="mt-8">
-            Browse Jobs
-          </GradientButton>
+          <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-zinc-800 text-xl font-medium text-zinc-400">
+            {user.username?.[0]?.toUpperCase() ?? "?"}
+          </div>
         )}
+
+        <h2 className="mt-4 text-lg font-medium text-zinc-100">{user.username}</h2>
+        <p className="mt-1 text-sm text-zinc-500">{user.email}</p>
+
+        <div className="mt-6 border-t border-zinc-800 pt-6">
+          <dl className="grid grid-cols-2 gap-4 text-left text-sm">
+            <div>
+              <dt className="text-zinc-600">Resume</dt>
+              <dd className="mt-0.5 font-medium text-zinc-300">
+                {hasResume ? "Uploaded" : "Missing"}
+              </dd>
+            </div>
+            <div>
+              <dt className="text-zinc-600">Can apply</dt>
+              <dd className="mt-0.5 font-medium text-zinc-300">
+                {hasResume ? "Yes" : "Upload resume first"}
+              </dd>
+            </div>
+          </dl>
+        </div>
+
+        <div className="mt-6">
+          {!hasResume ? (
+            <GradientButton onClick={() => router.push("/resume")} fullWidth>
+              Upload resume
+            </GradientButton>
+          ) : (
+            <GradientButton href="/jobs" variant="secondary" fullWidth>
+              Browse jobs
+            </GradientButton>
+          )}
+        </div>
       </GlassCard>
-    </PageShell>
+    </div>
   );
 }

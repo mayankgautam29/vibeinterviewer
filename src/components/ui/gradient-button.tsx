@@ -3,10 +3,16 @@ import { cn } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
 
 const variants = {
-  primary: "from-cyan-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 shadow-cyan-500/25",
-  success: "from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 shadow-emerald-500/25",
-  danger: "from-rose-500 to-red-600 hover:from-rose-400 hover:to-red-500 shadow-rose-500/25",
-  violet: "from-violet-500 to-fuchsia-600 hover:from-violet-400 hover:to-fuchsia-500 shadow-violet-500/25",
+  primary:
+    "bg-zinc-100 text-zinc-950 hover:bg-white border border-transparent",
+  secondary:
+    "bg-transparent text-zinc-200 border border-zinc-700 hover:border-zinc-500 hover:bg-zinc-900",
+  success:
+    "bg-emerald-600 text-white border border-emerald-600 hover:bg-emerald-500",
+  danger:
+    "bg-transparent text-red-400 border border-red-900/60 hover:border-red-700 hover:bg-red-950/40",
+  violet:
+    "bg-zinc-100 text-zinc-950 hover:bg-white border border-transparent",
 };
 
 type Props = {
@@ -19,6 +25,7 @@ type Props = {
   onClick?: () => void;
   type?: "button" | "submit";
   fullWidth?: boolean;
+  size?: "sm" | "md";
 };
 
 export function GradientButton({
@@ -31,20 +38,18 @@ export function GradientButton({
   onClick,
   type = "button",
   fullWidth,
+  size = "md",
 }: Props) {
   const classes = cn(
-    "relative inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r px-6 py-3 text-sm font-semibold text-white shadow-lg transition-all duration-300 disabled:cursor-not-allowed disabled:opacity-50",
+    "inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-40",
+    size === "sm" ? "px-3 py-1.5" : "px-4 py-2.5",
     variants[variant],
     fullWidth && "w-full",
     className
   );
 
   if (href) {
-    return (
-      <Link href={href} className={classes}>
-        {children}
-      </Link>
-    );
+    return <Link href={href} className={classes}>{children}</Link>;
   }
 
   return (
