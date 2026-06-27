@@ -35,6 +35,10 @@ type Interview = {
   interviewSummary: string;
   interviewScore: number;
   status: string;
+  integrityNotes?: string;
+  cheatingFlags?: string[];
+  questionCount?: number;
+  screenshots?: { data: string; timestamp: string; questionNumber: number }[];
 };
 
 export default function JobPage() {
@@ -49,6 +53,9 @@ export default function JobPage() {
   const [usr, setUsr] = useState<User | null>(null);
   const [interviewModel, setInterviewModel] = useState<Interview | null>(null);
   const [userInterview, setUserInterview] = useState<Interview | null>(null);
+  const [snapshots, setSnapshots] = useState<
+    { data: string; timestamp: string; questionNumber: number }[]
+  >([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -64,6 +71,15 @@ export default function JobPage() {
           const interviewRes = await axios.post("/api/getinterviewresults", { jobId });
           setUsr(interviewRes.data.user);
           setInterviewModel(interviewRes.data.interview);
+
+          if (interviewRes.data.interview?.userId) {
+            const snapRes = await axios.get(
+              `/api/upload-screenshot?jobId=${jobId}&userId=${interviewRes.data.interview.userId}`
+            );
+            const fromInterview = interviewRes.data.interview?.screenshots ?? [];
+            const fromSnapshot = snapRes.data?.screenshots ?? [];
+            setSnapshots(fromInterview.length > 0 ? fromInterview : fromSnapshot);
+          }
         } else {
           const appliedRes = await axios.post("/api/jobapplied", { jobId, userId });
           if (appliedRes.data.message === null) {
@@ -130,10 +146,44 @@ export default function JobPage() {
               <div className="text-white">User: <span className="font-semibold">{usr?.username}</span></div>
               <div className="text-white">Score: {interviewModel?.interviewScore}</div>
               <div className="text-white">Status: {interviewModel?.status}</div>
+              {interviewModel?.questionCount != null && (
+                <div className="text-white">Questions asked: {interviewModel.questionCount}</div>
+              )}
+              {interviewModel?.integrityNotes && (
+                <div className="text-amber-300 text-sm">
+                  <span className="font-medium">Integrity notes:</span> {interviewModel.integrityNotes}
+                </div>
+              )}
+              {interviewModel?.cheatingFlags && interviewModel.cheatingFlags.length > 0 && (
+                <div className="text-red-300 text-sm">
+                  <span className="font-medium">Flags:</span>{" "}
+                  {interviewModel.cheatingFlags.join(", ")}
+                </div>
+              )}
               <div className="text-white whitespace-pre-wrap">
                 <span className="font-medium">Interview Summary:</span><br />
                 {interviewModel?.interviewSummary || "No summary available."}
               </div>
+
+              {snapshots.length > 0 && (
+                <div>
+                  <span className="font-medium text-white">Interview Snapshots ({snapshots.length})</span>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 mt-2">
+                    {snapshots.map((shot, i) => (
+                      <div key={i} className="relative group">
+                        <img
+                          src={`data:image/jpeg;base64,${shot.data}`}
+                          alt={`Snapshot Q${shot.questionNumber || i + 1}`}
+                          className="w-full h-24 object-cover rounded-lg border border-cyan-700/50"
+                        />
+                        <span className="absolute bottom-1 left-1 text-[10px] bg-black/70 px-1.5 py-0.5 rounded text-cyan-200">
+                          Q{shot.questionNumber || "?"}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               <div className="flex gap-3 mt-3">
                 <button

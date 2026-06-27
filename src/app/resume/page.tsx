@@ -3,29 +3,39 @@
 import { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@clerk/nextjs";
 import { Loader2, UploadCloud } from "lucide-react";
+import { config } from "@/lib/config";
 
 export default function Resume() {
   const [pdf, setPdf] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState("");
   const router = useRouter();
+  const { userId } = useAuth();
 
   const uploadPDF = async () => {
     if (!pdf) return;
 
     const formData = new FormData();
     formData.append("file", pdf);
+    if (userId) formData.append("userId", userId);
     setLoading(true);
+    setStatus("");
 
     try {
-      const res = await axios.post("https://vibeinterviewer-backend1-1.onrender.com/indexing", formData);
+      const res = await axios.post(config.indexingUrl, formData);
       const msg = JSON.stringify(res.data.message, null, 2);
       await axios.post("/api/resumeupload", { message: msg });
 
-      // Redirect after upload
-      router.push("/jobs");
+      const indexed = res.data.indexed ?? 0;
+      const cached = res.data.cached ? " (from cache)" : "";
+      setStatus(`Resume indexed with ${indexed} vector chunks${cached}.`);
+
+      setTimeout(() => router.push("/jobs"), 1200);
     } catch (err) {
       console.error("Upload failed:", err);
+      setStatus("Upload failed. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -62,6 +72,10 @@ export default function Resume() {
             </>
           )}
         </button>
+
+        {status && (
+          <p className="text-sm text-center text-emerald-400">{status}</p>
+        )}
       </div>
     </div>
   );

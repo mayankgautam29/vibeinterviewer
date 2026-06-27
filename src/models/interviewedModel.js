@@ -18,7 +18,17 @@ const interviewModel = new Schema({
     type: String,
     enum: ["pending", "accepted", "rejected"],
     default: "pending",
-  }
+  },
+  screenshots: [
+    {
+      data: String,
+      timestamp: String,
+      questionNumber: Number,
+    },
+  ],
+  integrityNotes: { type: String },
+  cheatingFlags: [{ type: String }],
+  questionCount: { type: Number },
 });
 const Interview =
   mongoose.models.Interview || mongoose.model("Interview", interviewModel);
