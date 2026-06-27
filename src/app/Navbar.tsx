@@ -22,27 +22,27 @@ export default function Navbar() {
     href === "/" ? pathname === "/" : pathname.startsWith(href);
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 border-b border-zinc-800/80 bg-zinc-950/90 backdrop-blur-md">
+    <header className="fixed inset-x-0 top-0 z-50 border-b border-slate-700/50 bg-slate-950/75 backdrop-blur-xl">
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        <Link href="/" className="flex items-center gap-2.5">
-          <span className="flex h-7 w-7 items-center justify-center rounded-md bg-zinc-100 text-xs font-bold text-zinc-950">
+        <Link href="/" className="group flex items-center gap-2.5">
+          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-sky-400 to-teal-500 text-xs font-bold text-slate-950 shadow-lg shadow-sky-500/20 transition group-hover:shadow-sky-500/30">
             VI
           </span>
-          <span className="text-sm font-semibold tracking-tight text-zinc-100">
-            VibeInterviewer
+          <span className="text-sm font-semibold tracking-tight text-slate-100">
+            Vibe<span className="text-sky-400">Interviewer</span>
           </span>
         </Link>
 
-        <nav className="hidden items-center gap-6 md:flex">
+        <nav className="hidden items-center gap-1 md:flex">
           {links.map((link) => (
             <Link
               key={link.href}
               href={link.href}
               className={cn(
-                "text-sm transition-colors",
+                "rounded-lg px-3.5 py-2 text-sm transition-all",
                 isActive(link.href)
-                  ? "font-medium text-zinc-100"
-                  : "text-zinc-500 hover:text-zinc-200"
+                  ? "bg-sky-500/10 font-medium text-sky-300 ring-1 ring-sky-500/20"
+                  : "text-slate-400 hover:bg-slate-800/60 hover:text-slate-200"
               )}
             >
               {link.label}
@@ -56,7 +56,7 @@ export default function Navbar() {
 
         <button
           type="button"
-          className="rounded-md p-2 text-zinc-400 hover:bg-zinc-900 hover:text-zinc-100 md:hidden"
+          className="rounded-lg p-2 text-slate-400 hover:bg-slate-800/80 hover:text-slate-100 md:hidden"
           onClick={() => setOpen(!open)}
           aria-label="Toggle menu"
         >
@@ -65,7 +65,7 @@ export default function Navbar() {
       </div>
 
       {open && (
-        <div className="border-t border-zinc-800 bg-zinc-950 px-4 py-3 md:hidden">
+        <div className="border-t border-slate-700/50 bg-slate-950/95 px-4 py-3 md:hidden">
           <nav className="flex flex-col gap-1">
             {links.map((link) => (
               <Link
@@ -73,16 +73,16 @@ export default function Navbar() {
                 href={link.href}
                 onClick={() => setOpen(false)}
                 className={cn(
-                  "rounded-md px-3 py-2.5 text-sm",
+                  "rounded-lg px-3 py-2.5 text-sm",
                   isActive(link.href)
-                    ? "bg-zinc-900 font-medium text-zinc-100"
-                    : "text-zinc-400 hover:bg-zinc-900/60"
+                    ? "bg-sky-500/10 font-medium text-sky-300"
+                    : "text-slate-400 hover:bg-slate-800/60"
                 )}
               >
                 {link.label}
               </Link>
             ))}
-            <div className="mt-2 border-t border-zinc-800 pt-3">
+            <div className="mt-2 border-t border-slate-700/50 pt-3">
               <AuthButton />
             </div>
           </nav>

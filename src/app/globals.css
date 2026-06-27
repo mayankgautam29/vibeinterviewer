@@ -17,6 +17,8 @@
   --color-muted-foreground: var(--muted-foreground);
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
+  --color-accent: var(--accent);
+  --color-accent-muted: var(--accent-muted);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -24,18 +26,20 @@
 }
 
 :root {
-  --radius: 0.5rem;
-  --background: #09090b;
-  --foreground: #fafafa;
-  --card: #111113;
-  --card-foreground: #fafafa;
-  --primary: #fafafa;
-  --primary-foreground: #09090b;
-  --muted: #18181b;
-  --muted-foreground: #a1a1aa;
-  --border: #27272a;
-  --input: #27272a;
-  --ring: #52525b;
+  --radius: 0.625rem;
+  --background: #0b1120;
+  --foreground: #f1f5f9;
+  --card: #131c31;
+  --card-foreground: #f1f5f9;
+  --primary: #38bdf8;
+  --primary-foreground: #0b1120;
+  --muted: #1a2540;
+  --muted-foreground: #94a3b8;
+  --border: #243049;
+  --input: #1a2540;
+  --ring: #38bdf8;
+  --accent: #2dd4bf;
+  --accent-muted: #14b8a6;
 }
 
 @layer base {
@@ -50,39 +54,88 @@
   body {
     @apply bg-background text-foreground antialiased;
     font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
-    background-color: #09090b;
-    background-image:
-      radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.04) 1px, transparent 0);
-    background-size: 32px 32px;
   }
+}
+
+/* Ambient background orbs */
+.app-bg {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  background: linear-gradient(165deg, #0b1120 0%, #0f172a 40%, #0c1222 100%);
+}
+
+.app-bg::before {
+  content: "";
+  position: absolute;
+  top: -20%;
+  left: -10%;
+  width: 55%;
+  height: 55%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.12) 0%, transparent 70%);
+  filter: blur(40px);
+}
+
+.app-bg::after {
+  content: "";
+  position: absolute;
+  bottom: -15%;
+  right: -5%;
+  width: 45%;
+  height: 45%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(45, 212, 191, 0.08) 0%, transparent 70%);
+  filter: blur(50px);
 }
 
 @layer utilities {
   .surface {
-    @apply rounded-lg border border-zinc-800 bg-zinc-900/40;
+    @apply rounded-xl border border-slate-700/60 bg-slate-900/50 shadow-sm;
+    box-shadow:
+      0 1px 0 0 rgba(255, 255, 255, 0.04) inset,
+      0 4px 24px -8px rgba(0, 0, 0, 0.4);
   }
 
   .surface-hover {
-    @apply transition-colors hover:border-zinc-700 hover:bg-zinc-900/70;
+    @apply transition-all duration-200 hover:border-sky-500/30 hover:bg-slate-800/60 hover:shadow-md;
   }
 
   .page-title {
-    @apply text-3xl font-semibold tracking-tight text-zinc-50 sm:text-4xl;
+    @apply text-3xl font-semibold tracking-tight text-slate-50 sm:text-4xl;
+  }
+
+  .hero-title {
+    @apply text-4xl font-semibold tracking-tight sm:text-5xl sm:leading-[1.12];
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 45%, #7dd3fc 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
   }
 
   .page-subtitle {
-    @apply text-base leading-relaxed text-zinc-400;
+    @apply text-base leading-relaxed text-slate-400;
   }
 
   .section-label {
-    @apply text-xs font-medium uppercase tracking-[0.14em] text-zinc-500;
+    @apply text-xs font-semibold uppercase tracking-[0.12em] text-sky-400/90;
+  }
+
+  .accent-line {
+    @apply h-px w-12 bg-gradient-to-r from-sky-500/80 to-teal-500/40;
   }
 
   .input-field {
-    @apply w-full rounded-md border border-zinc-800 bg-zinc-950 px-3.5 py-2.5 text-sm text-zinc-100 placeholder:text-zinc-600 transition-colors focus:border-zinc-600 focus:outline-none focus:ring-1 focus:ring-zinc-600;
+    @apply w-full rounded-lg border border-slate-700/80 bg-slate-950/60 px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 transition-all focus:border-sky-500/50 focus:outline-none focus:ring-2 focus:ring-sky-500/15;
   }
 
   .label-field {
-    @apply mb-1.5 block text-sm font-medium text-zinc-300;
+    @apply mb-1.5 block text-sm font-medium text-slate-300;
+  }
+
+  .icon-box {
+    @apply flex h-10 w-10 items-center justify-center rounded-lg bg-sky-500/10 text-sky-400 ring-1 ring-sky-500/20;
   }
 }

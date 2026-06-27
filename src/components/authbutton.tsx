@@ -12,7 +12,7 @@ export default function AuthButton() {
   useEffect(() => setMounted(true), []);
 
   if (!mounted) {
-    return <div className="h-8 w-20 animate-pulse rounded-md bg-zinc-800" />;
+    return <div className="h-8 w-20 animate-pulse rounded-lg bg-slate-800" />;
   }
 
   if (isSignedIn) {
@@ -20,7 +20,7 @@ export default function AuthButton() {
       <button
         type="button"
         onClick={() => signOut()}
-        className="rounded-md border border-zinc-700 px-3.5 py-1.5 text-sm text-zinc-300 transition-colors hover:border-zinc-600 hover:text-zinc-100"
+        className="rounded-lg border border-slate-600/80 px-3.5 py-1.5 text-sm text-slate-300 transition hover:border-slate-500 hover:bg-slate-800/80 hover:text-white"
       >
         Sign out
       </button>
@@ -30,7 +30,7 @@ export default function AuthButton() {
   return (
     <Link
       href="/sign-in"
-      className="rounded-md bg-zinc-100 px-3.5 py-1.5 text-sm font-medium text-zinc-950 transition-colors hover:bg-white"
+      className="rounded-lg bg-gradient-to-r from-sky-500 to-teal-500 px-3.5 py-1.5 text-sm font-medium text-slate-950 shadow-md shadow-sky-500/20 transition hover:brightness-110"
     >
       Sign in
     </Link>

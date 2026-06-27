@@ -28,8 +28,9 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body className={`${geistSans.variable} ${geistMono.variable} min-h-screen`}>
+          <div className="app-bg" aria-hidden />
           <Navbar />
-          <main className="mx-auto min-h-[calc(100vh-3.5rem)] max-w-6xl px-4 pb-16 pt-20 sm:px-6 lg:px-8">
+          <main className="relative mx-auto min-h-[calc(100vh-3.5rem)] max-w-6xl px-4 pb-16 pt-20 sm:px-6 lg:px-8">
             {children}
           </main>
         </body>

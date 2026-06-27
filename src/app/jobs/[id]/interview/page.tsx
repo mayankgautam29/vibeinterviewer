@@ -385,28 +385,28 @@ export default function InterviewPage() {
 
   return (
     <div className="-mx-4 space-y-6 sm:-mx-6 lg:-mx-8">
-      <div className="flex flex-col gap-4 border-b border-zinc-800 pb-6 sm:flex-row sm:items-end sm:justify-between">
+      <div className="flex flex-col gap-4 border-b border-slate-700/50 pb-6 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="section-label mb-2">Live session</p>
-          <h1 className="text-xl font-semibold tracking-tight text-zinc-50 sm:text-2xl">
+          <h1 className="text-xl font-semibold tracking-tight text-slate-50 sm:text-2xl">
             Interview
           </h1>
-          <p className="mt-1 text-sm text-zinc-500">
+          <p className="mt-1 text-sm text-slate-500">
             Answer by voice or text. Questions adapt to your responses.
           </p>
         </div>
-        <div className="flex flex-wrap gap-2 text-xs text-zinc-500">
-          <span className="inline-flex items-center gap-1.5 rounded-md border border-zinc-800 px-2.5 py-1">
-            {socketReady ? <Wifi className="h-3.5 w-3.5 text-emerald-500" /> : <WifiOff className="h-3.5 w-3.5" />}
+        <div className="flex flex-wrap gap-2 text-xs">
+          <span className="inline-flex items-center gap-1.5 rounded-lg border border-slate-700/60 bg-slate-900/50 px-2.5 py-1 text-slate-400">
+            {socketReady ? <Wifi className="h-3.5 w-3.5 text-teal-400" /> : <WifiOff className="h-3.5 w-3.5" />}
             {socketReady ? "Connected" : "Connecting"}
           </span>
           {started && !interviewEnded && runningScore != null && (
-            <span className="rounded-md border border-zinc-800 px-2.5 py-1">
+            <span className="rounded-lg border border-sky-500/20 bg-sky-500/5 px-2.5 py-1 text-sky-300">
               Avg {runningScore.toFixed(1)}/10
             </span>
           )}
           {started && !interviewEnded && (
-            <span className="inline-flex items-center gap-1 rounded-md border border-zinc-800 px-2.5 py-1">
+            <span className="inline-flex items-center gap-1 rounded-lg border border-slate-700/60 px-2.5 py-1 text-slate-400">
               <Camera className="h-3.5 w-3.5" />
               {snapshotCount} saved
             </span>
@@ -416,20 +416,20 @@ export default function InterviewPage() {
 
       {started && !interviewEnded && (
         <div className="space-y-2">
-          <div className="flex justify-between text-xs text-zinc-500">
+          <div className="flex justify-between text-xs text-slate-500">
             <span>
               Question {questionNumber || 1} · {minQuestions}–{maxQuestions} expected
             </span>
             {isEvaluating ? (
-              <span className="flex items-center gap-1">
+              <span className="flex items-center gap-1 text-sky-400">
                 <Loader2 className="h-3 w-3 animate-spin" />
                 Evaluating
               </span>
             ) : null}
           </div>
-          <div className="h-1 overflow-hidden rounded-full bg-zinc-800">
+          <div className="h-1.5 overflow-hidden rounded-full bg-slate-800">
             <div
-              className="h-full bg-zinc-400 transition-all duration-500"
+              className="h-full rounded-full bg-gradient-to-r from-sky-500 to-teal-400 transition-all duration-500"
               style={{ width: `${Math.max(progressPercent, started ? 6 : 0)}%` }}
             />
           </div>
@@ -438,7 +438,7 @@ export default function InterviewPage() {
 
       <div className="grid gap-6 lg:grid-cols-5">
         <div className="space-y-2 lg:col-span-2">
-          <div className="relative aspect-video overflow-hidden rounded-md border border-zinc-800 bg-black">
+          <div className="relative aspect-video overflow-hidden rounded-xl border border-slate-700/60 bg-black shadow-lg ring-1 ring-sky-500/10">
             <video
               ref={videoRef}
               autoPlay
@@ -459,32 +459,32 @@ export default function InterviewPage() {
               </div>
             )}
           </div>
-          <p className="text-center text-xs text-zinc-600">
+          <p className="text-center text-xs text-slate-600">
             Session snapshots saved every 30 seconds for review.
           </p>
         </div>
 
-        <div className="flex min-h-[480px] flex-col overflow-hidden rounded-md border border-zinc-800 lg:col-span-3">
+        <div className="surface flex min-h-[480px] flex-col overflow-hidden lg:col-span-3">
           <div className="flex-1 space-y-4 overflow-y-auto p-4">
             {messages.length === 0 && (
-              <p className="py-16 text-center text-sm text-zinc-600">
+              <p className="py-16 text-center text-sm text-slate-600">
                 Press start when you&apos;re ready.
               </p>
             )}
             {messages.map((msg, idx) => (
               <div key={idx} className={msg.role === "user" ? "text-right" : "text-left"}>
                 {msg.role === "system" ? (
-                  <p className="text-center text-xs text-zinc-600">{msg.text}</p>
+                  <p className="text-center text-xs text-slate-600">{msg.text}</p>
                 ) : (
                   <div
-                    className={`inline-block max-w-[90%] rounded-md px-3.5 py-2.5 text-sm leading-relaxed ${
+                    className={`inline-block max-w-[90%] rounded-lg px-3.5 py-2.5 text-sm leading-relaxed ${
                       msg.role === "user"
-                        ? "bg-zinc-100 text-zinc-950"
-                        : "border border-zinc-800 bg-zinc-900 text-zinc-300"
+                        ? "bg-gradient-to-r from-sky-500 to-teal-500 text-slate-950"
+                        : "border border-slate-700/60 bg-slate-900/80 text-slate-300"
                     }`}
                   >
                     {msg.role === "ai" && (
-                      <span className="mb-1 block text-[10px] font-medium uppercase tracking-wider text-zinc-500">
+                      <span className="mb-1 block text-[10px] font-medium uppercase tracking-wider text-sky-400/80">
                         Interviewer
                       </span>
                     )}
@@ -495,7 +495,7 @@ export default function InterviewPage() {
             ))}
           </div>
 
-          <div className="border-t border-zinc-800 p-4">
+          <div className="border-t border-slate-700/50 p-4">
             {!started && !interviewEnded && (
               <GradientButton
                 onClick={handleStartInterview}
@@ -509,12 +509,12 @@ export default function InterviewPage() {
             )}
 
             {interviewEnded && (
-              <div className="space-y-3 rounded-md border border-zinc-800 bg-zinc-900/50 p-4">
-                <div className="flex items-center gap-2 text-sm text-zinc-200">
-                  <CheckCircle2 className="h-4 w-4 text-emerald-500" />
+              <div className="space-y-3 rounded-lg border border-teal-500/20 bg-teal-500/5 p-4">
+                <div className="flex items-center gap-2 text-sm text-teal-200">
+                  <CheckCircle2 className="h-4 w-4 text-teal-400" />
                   Session complete
                   {finalScore != null && (
-                    <span className="text-zinc-500">· Score {finalScore}/100</span>
+                    <span className="text-slate-400">· Score {finalScore}/100</span>
                   )}
                 </div>
                 {endReason && <p className="text-xs text-zinc-500">{endReason}</p>}
@@ -538,7 +538,7 @@ export default function InterviewPage() {
                   type="button"
                   onClick={() => submitAnswer(input)}
                   disabled={!input.trim()}
-                  className="rounded-md border border-zinc-700 px-3 text-zinc-300 transition hover:border-zinc-500 hover:text-white disabled:opacity-30"
+                  className="rounded-lg border border-slate-700/60 px-3 text-slate-300 transition hover:border-sky-500/40 hover:text-sky-300 disabled:opacity-30"
                 >
                   <Send className="h-4 w-4" />
                 </button>
