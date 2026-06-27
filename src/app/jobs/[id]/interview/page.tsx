@@ -15,11 +15,39 @@ import {
   Loader2,
 } from "lucide-react";
 
-declare global {
-  interface Window {
-    webkitSpeechRecognition: unknown;
-    SpeechRecognition: unknown;
-  }
+interface SpeechRecognitionResultItem {
+  transcript: string;
+}
+
+interface SpeechRecognitionResultList {
+  length: number;
+  [index: number]: { isFinal: boolean; [index: number]: SpeechRecognitionResultItem };
+}
+
+interface SpeechRecognitionEventLike {
+  resultIndex: number;
+  results: SpeechRecognitionResultList;
+}
+
+interface SpeechRecognitionInstance {
+  continuous: boolean;
+  interimResults: boolean;
+  lang: string;
+  onresult: ((event: SpeechRecognitionEventLike) => void) | null;
+  onend: (() => void) | null;
+  onerror: ((event: { error: string }) => void) | null;
+  start: () => void;
+  stop: () => void;
+}
+
+type SpeechRecognitionConstructor = new () => SpeechRecognitionInstance;
+
+function getSpeechRecognitionCtor(): SpeechRecognitionConstructor | null {
+  const w = window as typeof window & {
+    SpeechRecognition?: SpeechRecognitionConstructor;
+    webkitSpeechRecognition?: SpeechRecognitionConstructor;
+  };
+  return w.SpeechRecognition ?? w.webkitSpeechRecognition ?? null;
 }
 
 type WsMessage = {
@@ -67,7 +95,7 @@ export default function InterviewPage() {
   const [endReason, setEndReason] = useState("");
 
   const socket = useRef<WebSocket | null>(null);
-  const recognition = useRef<any>(null);
+  const recognition = useRef<SpeechRecognitionInstance | null>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
   const latestTranscriptRef = useRef("");
   const silenceTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -190,8 +218,7 @@ export default function InterviewPage() {
   };
 
   const startSpeechRecognition = () => {
-    const SpeechRecognitionCtor =
-      window.SpeechRecognition || window.webkitSpeechRecognition;
+    const SpeechRecognitionCtor = getSpeechRecognitionCtor();
     if (!SpeechRecognitionCtor || interviewEnded) return;
 
     cleanupSpeech();
@@ -202,7 +229,7 @@ export default function InterviewPage() {
     recognitionInstance.lang = "en-US";
     setIsListening(true);
 
-    recognitionInstance.onresult = (event: any) => {
+    recognitionInstance.onresult = (event: SpeechRecognitionEventLike) => {
       let interim = "";
       for (let i = event.resultIndex; i < event.results.length; i++) {
         const transcript = event.results[i][0].transcript;
